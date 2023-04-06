@@ -10,7 +10,7 @@ export default function LandingNav() {
   }
 
   return (
-    <nav class="flex items-center justify-between flex-wrap bg-black p-6">
+    <nav class="flex items-center justify-between flex-wrap bg-black pt-10">
       <div class="flex items-center flex-shrink-0 text-white lg:ml-56">
         <img src={Logo} class="fill-current " width="283" height="74" viewBox="0 0 283 74"></img>
       </div>
@@ -33,7 +33,7 @@ export default function LandingNav() {
             Login
             <span class="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-main-blue"></span>
           </Link>
-          <Link to="/" class="group transition duration-300 block mt-4 lg:inline-block lg:mt-0 text-main-blue mr-12">
+          <Link to="/" class="group transition duration-300 block mt-4 lg:inline-block lg:mt-0 text-main-blue">
             Signup
             <span class="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-main-blue"></span>
           </Link>

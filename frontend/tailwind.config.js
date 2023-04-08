@@ -7,7 +7,8 @@ export default {
   theme: {
     extend: {
       colors:{
-        'main-blue': '#87A1FF'
+        'main-blue': '#87A1FF',
+        'card-grey': '#1E1E1E'
       },
       fontFamily:{
         latoFont:"'Lato', serif"

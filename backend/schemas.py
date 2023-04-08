@@ -21,7 +21,6 @@ class Account(_AccountBase):
     class Config:
         orm_mode = True
 
-
 class _UserBase(_pydantic.BaseModel):
     email: str
     first_name: str
@@ -34,5 +33,3 @@ class UserCreate(_UserBase):
 class User(_UserBase):
     class Config:
         orm_mode = True
-
-    pass

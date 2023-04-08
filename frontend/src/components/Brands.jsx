@@ -9,7 +9,7 @@ import {ReactComponent as Lexus} from "../assets/lexus.svg"
 
 function Brands() {
     return (
-      <div className="lg:mr-56 lg:ml-56 lg:mb-24">
+      <div className="lg:mr-56 lg:ml-56 lg:mb-20">
         <p className="text-white text-3xl font-bold pb-8">Notable Brands</p>
         <hr className="pb-4"/>
         <div class="flex justify-between h-20">

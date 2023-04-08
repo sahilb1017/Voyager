@@ -41,6 +41,8 @@ const styles = {
     rowContentColor: 'grey',
     arrowColor: "white",
     rowTitleTextSize: '18px',
+    rowContentPaddingBottom: '20px',
+    rowContentPaddingTop: '10px',
 };
 
 const config = {

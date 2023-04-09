@@ -7,7 +7,9 @@ import Questions from '../components/Questions'
 function Home() {
   return (
     <div>
-        <LandingNav />
+        <LandingNav 
+            type="Home"
+        />
         <HomeInfo />
         <Brands />
         <Featured />

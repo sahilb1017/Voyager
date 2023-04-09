@@ -20,6 +20,7 @@ async def create_account(account: _schemas.AccountCreate, db: _orm.Session = _fa
 async def update_account(account: _schemas.Account, db: _orm.Session = _fastapi.Depends(_services.get_db)):
     return await _services.update_account(account, db)
 
+
 @app.put("/account/update/user")
 async def update_user(user: _schemas.User, db: _orm.Session = _fastapi.Depends(_services.get_db)):
     return await _services.update_user(user, db)

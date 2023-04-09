@@ -85,10 +85,12 @@ async def update_account(account: _schemas.Account, db: _orm.Session):
     user =  db.execute(_sql.sql.text(f'SELECT * FROM ACCOUNT WHERE Email = "{account.email}"'))
     found_user = user.first()   
 
-    return _schemas.Account(
+    user_obj = _schemas.Account(
         email=found_user.Email, ph_Num=found_user.Ph_Num, city=found_user.City, 
         postal_Code=found_user.Postal_Code, street=found_user.Street, province=found_user.Province, acc_type=found_user.User_Type
     )
+
+    return await create_token(user_obj)
 
 
 async def update_user(user: _schemas.User, db: _orm.Session):

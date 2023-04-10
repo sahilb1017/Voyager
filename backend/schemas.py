@@ -80,3 +80,38 @@ class Vehicle(_VehicleBase):
 
 class Car(Vehicle):
     type: str
+    class Config:
+        orm_mode = True   
+
+class Truck(Vehicle):
+    tonnage: str
+    class Config:
+        orm_mode = True   
+
+class Boat(Vehicle):
+    knots: str
+    class Config:
+        orm_mode = True  
+
+class Motorcycle(Vehicle):
+    cc: str
+    class Config:
+        orm_mode = True  
+
+class Jet(Vehicle):
+    tbo: str
+    class Config:
+        orm_mode = True  
+
+
+class _IRBase(_pydantic.BaseModel):
+    damages: str
+    cleanliness: str
+    overall: str
+    inspector_email: str
+    vehicle_reg: str
+
+class IR(_IRBase):
+    class Config:
+        orm_mode = True  
+

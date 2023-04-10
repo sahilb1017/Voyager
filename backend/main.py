@@ -21,7 +21,7 @@ async def update_account(account: _schemas.Account, db: _orm.Session = _fastapi.
     return await _services.update_account(account, db)
 
 
-@app.post("/account /create/user")
+@app.post("/account/create/user")
 async def create_update(user: _schemas.User, db: _orm.Session = _fastapi.Depends(_services.get_db)):
     return await _services.create_user(user, db)
 
@@ -43,7 +43,63 @@ async def login_account(account: _schemas.AccountCreate, db: _orm.Session = _fas
         raise _fastapi.HTTPException(status_code=401, detail="Invalid Credentials")
     return user
 
+
 @app.post("/vehicles/create")
 async def create_vehicle(vehicle: _schemas.VehicleCreate, db: _orm.Session = _fastapi.Depends(_services.get_db)):
-    await _services.create_vehicle(vehicle, db)
+    await _services.Vehicles.create_vehicle(vehicle, db)
     return True
+
+
+@app.get("/vehicles/browse/get-cars")
+async def browse_get_cars(db: _orm.Session = _fastapi.Depends(_services.get_db)):
+    return await _services.Vehicles.get_cars_browse(db)
+
+
+@app.get("/vehicles/browse/get-trucks")
+async def browse_get_trucks(db: _orm.Session = _fastapi.Depends(_services.get_db)):
+    return await _services.Vehicles.get_trucks_browse(db)
+
+
+@app.get("/vehicles/browse/get-boats")
+async def browse_get_boats(db: _orm.Session = _fastapi.Depends(_services.get_db)):
+    return await _services.Vehicles.get_boats_browse(db)
+
+
+@app.get("/vehicles/browse/get-motorcycles")
+async def browse_get_motorcycles(db: _orm.Session = _fastapi.Depends(_services.get_db)):
+    return await _services.Vehicles.get_motorcycles_browse(db)
+
+
+@app.get("/vehicles/browse/get-jets")
+async def browse_get_jets(db: _orm.Session = _fastapi.Depends(_services.get_db)):
+    return await _services.Vehicles.get_jets_browse(db)
+
+
+@app.get("/inspection/get-cars")
+async def get_cars_to_inspect(db: _orm.Session = _fastapi.Depends(_services.get_db)):
+   return await _services.Inspection.get_cars_to_inspect(db)
+
+
+@app.get("/inspection/get-trucks")
+async def get_trucks_to_inspect(db: _orm.Session = _fastapi.Depends(_services.get_db)):
+   return await _services.Inspection.get_trucks_to_inspect(db)
+
+
+@app.get("/inspection/get-boats")
+async def get_boats_to_inspect(db: _orm.Session = _fastapi.Depends(_services.get_db)):
+   return await _services.Inspection.get_boats_to_inspect(db)
+
+
+@app.get("/inspection/get-motorcycles")
+async def get_motorcycles_to_inspect(db: _orm.Session = _fastapi.Depends(_services.get_db)):
+   return await _services.Inspection.get_motorcycles_to_inspect(db)
+
+
+@app.get("/inspection/get-jets")
+async def get_jets_to_inspect(db: _orm.Session = _fastapi.Depends(_services.get_db)):
+   return await _services.Inspection.get_jets_to_inspect(db)
+
+
+@app.post("/inspection/create")
+async def create_report(report: _schemas.IR, db: _orm.Session = _fastapi.Depends(_services.get_db)):
+    return await _services.Inspection.create_inspection_report(report, db)

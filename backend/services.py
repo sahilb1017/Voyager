@@ -1,15 +1,11 @@
 import database as _db
 import sqlalchemy.orm as _orm
 import sqlalchemy as _sql
-import models as _models
 import schemas as _schemas
 import passlib.hash as _hash
-import jwt as _jwt
-import fastapi as _fastapi
-import fastapi.security as _security
+from datetime import date
 
-oauth2schema = _security.OAuth2PasswordBearer(tokenUrl="/token")
-JWT_SECRET = "secret"
+
 
 def get_db():
     db = _db.SessionLocal()
@@ -53,25 +49,6 @@ async def authenticate_account(email: str, password: str, db: _orm.Session):
     return user_obj
 
 
-async def create_token(user: _schemas.Account):
-    token = _jwt.encode(user.dict(), JWT_SECRET)
-    return dict(access_token = token, token_type = "bearer")
-
-
-async def get_current_account(db: _orm.Session = _fastapi.Depends(get_db), token: str = _fastapi.Depends(oauth2schema)):
-    try:
-        payload = _jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
-        print(type(payload))
-
-    except:
-        raise _fastapi.HTTPException(status_code=401, detail="Invalid Email or Password")
-    
-    return _schemas.Account(
-        email=payload["email"], ph_Num=payload["ph_Num"], city=payload["city"], 
-        postal_Code=payload["postal_Code"], street=payload["street"], province=payload["province"], acc_type=payload["acc_type"]
-    )
-
-
 async def update_account(account: _schemas.Account, db: _orm.Session):
     db.execute(_sql.sql.text(f'''UPDATE ACCOUNT 
                                 SET Ph_Num = "{account.ph_Num}",
@@ -90,10 +67,10 @@ async def update_account(account: _schemas.Account, db: _orm.Session):
         postal_Code=found_user.Postal_Code, street=found_user.Street, province=found_user.Province, acc_type=found_user.User_Type
     )
 
-    return await create_token(user_obj)
+    return await user_obj
 
 
-async def update_user(user: _schemas.User, db: _orm.Session):
+async def create_user(user: _schemas.User, db: _orm.Session):
     db.execute(_sql.sql.text(f'INSERT INTO USER VALUES ("{user.email}", "{user.first_name}", "{user.last_name}", "{user.dob}")'))
     db.commit()
     found_user =  db.execute(_sql.sql.text(f'SELECT * FROM USER WHERE Email = "{user.email}"'))
@@ -102,6 +79,56 @@ async def update_user(user: _schemas.User, db: _orm.Session):
     return _schemas.User(
         email=found_user.Email, first_name=found_user.First_Name, last_name=found_user.Last_Name, dob=found_user.DOB
     )
+
+
+async def create_company(company: _schemas.Company, db: _orm.Session):
+    db.execute(_sql.sql.text(f'INSERT INTO COMPANY VALUES ("{company.email}", "{company.comp_name}")'))  
+    db.commit()
+
+    found_company =  db.execute(_sql.sql.text(f'SELECT * FROM Company WHERE Email = "{company.email}"'))
+    found_company = found_company.first()
+
+    return _schemas.Company(
+        email=found_company.Email, comp_name=found_company.Comp_Name
+    )
+
+
+async def create_inspector(inspector: _schemas.Inspector, db: _orm.Session):
+    db.execute(_sql.sql.text(f'INSERT INTO INSPECTOR VALUES ("{inspector.email}", "{inspector.first_name}", "{inspector.last_name}", "{inspector.dob}")'))
+    db.commit()
+    found_inspector =  db.execute(_sql.sql.text(f'SELECT * FROM USER WHERE Email = "{inspector.email}"'))
+    found_inspector = found_inspector.first()   
+
+    return _schemas.Inspector(
+        email=found_inspector.Email, first_name=found_inspector.First_Name, last_name=found_inspector.Last_Name, dob=found_inspector.DOB
+    )
+
+
+async def create_vehicle(vehicle: _schemas.VehicleCreate, db: _orm.Session):
+    mechanic_id = 1
+    cleaner_id = 1
+    today = str(date.today())
+    
+    db.execute(_sql.sql.text(f'''INSERT INTO VEHICLE VALUES(
+                                "{vehicle.reg_num}",
+                                "{vehicle.license}",
+                                {vehicle.num_passengers},
+                                "{vehicle.mileage}",
+                                "{vehicle.model}",
+                                "{vehicle.make}",
+                                "{vehicle.color}",
+                                "{vehicle.price}",
+                                1,
+                                0,
+                                {mechanic_id},
+                                {cleaner_id},
+                                "{vehicle.owner_id}",
+                                "{today}"
+                            )'''))
+    db.commit()
+
+    db.execute(_sql.sql.text(f'INSERT INTO {vehicle.vehicle_type} VALUES ("{vehicle.reg_num}", "{vehicle.extra}")'))
+    db.commit()
                                                 
 
 

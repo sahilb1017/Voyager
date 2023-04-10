@@ -27,9 +27,56 @@ class _UserBase(_pydantic.BaseModel):
     last_name: str
     dob: str
 
-class UserCreate(_UserBase):
-    pass
-
 class User(_UserBase):
     class Config:
         orm_mode = True
+
+
+class _CompanyBase(_pydantic.BaseModel):
+    email: str 
+    comp_name: str
+
+class Company(_CompanyBase):
+    class Config:
+        orm_mode = True
+
+class _InspectorBase(_pydantic.BaseModel):
+    email: str
+    first_name: str
+    last_name: str
+    dob: str
+
+class Inspector(_InspectorBase):
+    class Config:
+        orm_mode = True    
+
+
+class _VehicleBase(_pydantic.BaseModel):
+    reg_num: str
+    license: str
+    num_passengers: int
+    mileage: str
+    model: str
+    make: str
+    color: str
+    price: str
+    owner_id: str
+
+
+class VehicleCreate(_VehicleBase):
+    vehicle_type: str
+    extra: str
+    class Config:
+        orm_mode = True   
+
+class Vehicle(_VehicleBase):
+    date_posted: str    
+    mechanic_id: int
+    cleaner_id: int
+    availability: int
+    reviewed: int
+    class Config:
+        orm_mode = True   
+
+class Car(Vehicle):
+    type: str

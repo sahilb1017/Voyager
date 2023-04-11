@@ -6,9 +6,42 @@ import Linkdein_Logo from "/Linkedin_logo.png"
 import {motion} from 'framer-motion'
 import { Link } from "react-router-dom"
 import { useAppContext } from '../../context/userContext'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 
 export default function Login() {
+
+    const[form,setForm] = useState({email:"", password:""})
+
+    function handler(event){
+        setForm(Form =>{
+            return{
+            ...Form,
+            [event.target.name]:event.target.value
+        }
+        })}
+    
+
+    const emptyFieldToast = () => {
+        toast.error('Please fill out all required fields', {
+            position: toast.POSITION.TOP_RIGHT,
+            toastId: "EmptyField",
+            style: {
+                backgroundColor: '#353535',
+                color: '#87A1FF'
+              },
+        });
+    };
+
+
+
+    function LoginHandler(){
+        if(!form.email||!form.email){
+            emptyFieldToast()
+        }
+    }
   return (
     <div className='flex flex-col items-center justify-center'>
         <div className='mt-16 flex flex-col items-center justify-center'>
@@ -17,11 +50,18 @@ export default function Login() {
                 Login
             </h1>
             <div class = "flex flex-col justify-center items-center gap-y-6 mt-8">
-                <input type="email" name="email" placeholder="email" className="px-4 h-12 w-96 bg-main-grey text-white rounded-3xl outline-white outline-2 focus:outline focus:outline-white hover:outline hover:outline-[#464646]"/>
-                <input type="password" name="password" placeholder="password" className="px-4 h-12 w-96 bg-main-grey text-white rounded-3xl outline-white outline-2 focus:outline focus:outline-white hover:outline hover:outline-[#464646]"/>
-                <button className="bg-main-blue text-white rounded-3xl w-48 h-12 mt-2 hover:bg-[#5f82ff]">
+                <input type="email" name="email" placeholder="email" onChange = {handler} className="px-4 h-12 w-96 bg-main-grey text-white rounded-3xl outline-white outline-2 focus:outline focus:outline-white hover:outline hover:outline-[#464646]"/>
+                <input type="password" name="password" placeholder="password" onChange = {handler} className="px-4 h-12 w-96 bg-main-grey text-white rounded-3xl outline-white outline-2 focus:outline focus:outline-white hover:outline hover:outline-[#464646]"/>
+                <button onClick = {LoginHandler} className="bg-main-blue text-white rounded-3xl w-48 h-12 mt-2 hover:bg-[#5f82ff]">
                     Login
                 </button>
+                <ToastContainer hideProgressBar={true}/>
+                                    <style>
+                                    {
+                                    `.Toastify__toast--error .Toastify__toast-icon svg path {
+                                        fill: #87A1FF;
+                                    }`}
+                                    </style>
                 <div class="inline-flex items-center justify-center w-full mt-10">
                     <hr class="w-full h-0.5  bg-gray-200 border-0"></hr>
                     <span class="absolute px-3 bg-white dark:text-white dark:bg-black font-bold">OR</span>

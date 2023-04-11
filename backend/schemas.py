@@ -137,10 +137,22 @@ class _BookingBase(_pydantic.BaseModel):
     pickup: Location
     dropoff: Location
     cost: int
+    discount: int
     
 
 class BookingCreate(_BookingBase):
-
     class Config:
         orm_mode = True  
 
+
+class _CouponBase(_pydantic.BaseModel):
+    coupon: int
+
+class Coupon(_CouponBase):
+    class Config:
+        orm_mode = True  
+
+class CouponSend(_CouponBase):
+    discount: int
+    class Config:
+        orm_mode = True  

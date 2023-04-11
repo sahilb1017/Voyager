@@ -36,7 +36,7 @@ async def create_inspector(inspector: _schemas.Inspector, db: _orm.Session = _fa
     return await _services.create_inspector(inspector, db)
 
 
-@app.get("/account/login")
+@app.post("/account/login")
 async def login_account(account: _schemas.AccountCreate, db: _orm.Session = _fastapi.Depends(_services.get_db)):
     user = await _services.authenticate_account(account.email, account.password, db)
     if not user:
@@ -104,6 +104,17 @@ async def get_jets_to_inspect(db: _orm.Session = _fastapi.Depends(_services.get_
 async def create_report(report: _schemas.IRCreate, db: _orm.Session = _fastapi.Depends(_services.get_db)):
     return await _services.Inspection.create_inspection_report(report, db)
 
+
 @app.post("/booking/create")
 async def create_booking(booking: _schemas.BookingCreate, db: _orm.Session = _fastapi.Depends(_services.get_db)):
-    await _services.Booking.create_booking(booking, db)
+    return await _services.Booking.create_booking(booking, db)
+
+
+@app.post("/booking/find-coupon")
+async def find_coupon(coupon: _schemas.Coupon, db:  _orm.Session = _fastapi.Depends(_services.get_db)):
+    coupon = await _services.Booking.get_coupon(coupon, db)
+
+    if not coupon:
+        raise _fastapi.HTTPException(status_code=404, detail="Coupon does not exist")
+    
+    return coupon

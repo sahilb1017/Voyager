@@ -141,7 +141,7 @@ class Vehicles:
                                         v.Color, v.Price, v.Availability, v.Reviewed, v.Mechanic_ID, v.Cleaner_ID, v.Owner_ID,
                                         v.Date_Posted, c.Type FROM VEHICLE AS v JOIN CAR AS C ON v.REG_NUM = c.REG_NUM
                                         WHERE v.Reviewed = 1 AND v.Availability = 1
-                                        '''))        
+                                        '''))    
         for c in cars:
             x = _schemas.Car(
                 reg_num=c.REG_NUM, license=c.License, num_passengers=c.Num_Of_Passengers, mileage=c.Mileage, model=c.Model, make=c.Make, color=c.Color,
@@ -348,6 +348,7 @@ class Inspection:
 
 class Booking:
     async def create_booking(booking: _schemas.BookingCreate, db: _orm.Session):
+        today = str(date.today())
         # # First we need to create 2 locations in the LOCATION table
         # #insert pickup location
         db.execute(_sql.sql.text(f'''INSERT INTO LOCATION(City, Postal_Code, Street, Province) 
@@ -360,7 +361,7 @@ class Booking:
         db.commit()
 
         #get location ids for pickup and dropoff
-        #0 is pickup, 1 is dropoff
+        #0 is dropoff, 1 is pickup
         locationIDs = []
         locations = db.execute(_sql.sql.text(f'SELECT Location_ID FROM LOCATION ORDER BY Location_ID DESC LIMIT 2'))
 
@@ -369,6 +370,40 @@ class Booking:
 
         #Create booking row in BOOKING table
         db.execute(_sql.sql.text(f'''INSERT INTO BOOKING(Number_Days, Start_Date, End_Date, PickUp_Location, DropOff_Location)
-                                VALUES({booking.num_days}, "{booking.start_date}", "{booking.end_date}", {locationIDs[0]}, {locationIDs[1]})
+                                VALUES({booking.num_days}, "{booking.start_date}", "{booking.end_date}", {locationIDs[1]}, {locationIDs[0]})
                                 '''))
+        db.commit()
+
+        #Get booking id for created booking
+        bookingID = 0
+        bookingss = db.execute(_sql.sql.text(f'SELECT Booking_ID FROM BOOKING ORDER BY Booking_ID DESC LIMIT 1'))
+
+        for b in bookingss:
+            bookingID = b.Booking_ID
+        
+        db.execute(_sql.sql.text(f'''INSERT INTO BILL(Booking_ID, Cost, Bill_Date, Discount_Applied, Insurance_ID, Coupon_ID)
+                                VALUES({bookingID}, {booking.cost}, "{today}", {booking.discount}, {booking.insurance_id}, {booking.coupon_id})
+                                '''))
+        db.commit()
+
+        #Populate BOOKS table 
+        db.execute(_sql.sql.text(f'INSERT INTO BOOKS VALUES ("{booking.vehicle_reg}", "{booking.email}", {bookingID})'))
+        db.commit()
+
+        #change vehicle availability
+        db.execute(_sql.sql.text(f'UPDATE VEHICLE SET Availability = 0 WHERE REG_NUM = "{booking.vehicle_reg}"'))
+        db.commit()
+
+        return booking
     
+    async def get_coupon(coupon: _schemas.Coupon, db: _orm.Session):
+        coupon = db.execute(_sql.sql.text(f'SELECT * FROM COUPON WHERE Coupon_ID = {coupon.coupon}'))
+
+        found_coupon = coupon.first()
+
+        if not found_coupon:
+            return False
+
+        return _schemas.CouponSend(
+            coupon=found_coupon.Coupon_ID, discount=found_coupon.Discount
+        )

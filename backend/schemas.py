@@ -1,5 +1,6 @@
 import pydantic as _pydantic
 import datetime as _dt
+from typing import List
 
 class _AccountBase(_pydantic.BaseModel):
     email: str
@@ -110,8 +111,36 @@ class _IRBase(_pydantic.BaseModel):
     overall: str
     inspector_email: str
     vehicle_reg: str
+    decision: int
 
-class IR(_IRBase):
+class IRCreate(_IRBase):
+    type: str
+    class Config:
+        orm_mode = True  
+
+
+class Location(_pydantic.BaseModel):
+    city: str
+    postal_code: str
+    street: str
+    province: str
+
+
+class _BookingBase(_pydantic.BaseModel):
+    vehicle_reg: str
+    email: str
+    num_days: int
+    start_date: str
+    end_date: str
+    insurance_id: int
+    coupon_id: int
+    pickup: Location
+    dropoff: Location
+    cost: int
+    
+
+class BookingCreate(_BookingBase):
+
     class Config:
         orm_mode = True  
 

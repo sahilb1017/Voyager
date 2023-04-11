@@ -328,12 +328,47 @@ class Inspection:
         return jets_to_send
     
 
-    async def create_inspection_report(report: _schemas.IR, db: _orm.Session):
-        db.execute(_sql.sql.text(f'''INSERT INTO INSPECTION_REPORT(Damages_Level, Cleanliness_Level, Overall_Rating, Inspector_Email, Vehicle_Reg) 
-                                 VALUES ("{report.damages}", "{report.cleanliness}", "{report.overall}", "{report.inspector_email}", "{report.vehicle_reg}")'''))
-        db.commit()
+    async def create_inspection_report(report: _schemas.IRCreate, db: _orm.Session):
+        db.execute(_sql.sql.text(f'''INSERT INTO INSPECTION_REPORT(Damages_Level, Cleanliness_Level, Overall_Rating, Inspector_Email, Vehicle_Reg, Decision) 
+                                 VALUES ("{report.damages}", "{report.cleanliness}", "{report.overall}", "{report.inspector_email}", "{report.vehicle_reg}", {report.decision})'''))
+        db.commit() 
 
-        db.execute(_sql.sql.text(f'UPDATE VEHICLE SET Reviewed = 1 WHERE REG_NUM = "{report.vehicle_reg}"'))
-        db.commit()
+        if(report.decision == 1):
+            db.execute(_sql.sql.text(f'UPDATE VEHICLE SET Reviewed = 1 WHERE REG_NUM = "{report.vehicle_reg}"'))
+            db.commit()
+
+        else:
+            db.execute(_sql.sql.text(f'DELETE FROM VEHICLE WHERE REG_NUM = "{report.vehicle_reg}"'))
+            db.commit()
+            db.execute(_sql.sql.text(f'DELETE FROM {report.type} WHERE REG_NUM = "{report.vehicle_reg}"'))
+            db.commit()
 
         return report;
+
+
+class Booking:
+    async def create_booking(booking: _schemas.BookingCreate, db: _orm.Session):
+        # # First we need to create 2 locations in the LOCATION table
+        # #insert pickup location
+        db.execute(_sql.sql.text(f'''INSERT INTO LOCATION(City, Postal_Code, Street, Province) 
+                                VALUES ("{booking.pickup.city}", "{booking.pickup.postal_code}", "{booking.pickup.street}", "{booking.pickup.province}")'''))
+        db.commit()
+
+        #insert dropoff location
+        db.execute(_sql.sql.text(f'''INSERT INTO LOCATION(City, Postal_Code, Street, Province) 
+                                VALUES ("{booking.dropoff.city}", "{booking.dropoff.postal_code}", "{booking.dropoff.street}", "{booking.dropoff.province}")'''))
+        db.commit()
+
+        #get location ids for pickup and dropoff
+        #0 is pickup, 1 is dropoff
+        locationIDs = []
+        locations = db.execute(_sql.sql.text(f'SELECT Location_ID FROM LOCATION ORDER BY Location_ID DESC LIMIT 2'))
+
+        for l in locations:
+            locationIDs.append(l.Location_ID)
+
+        #Create booking row in BOOKING table
+        db.execute(_sql.sql.text(f'''INSERT INTO BOOKING(Number_Days, Start_Date, End_Date, PickUp_Location, DropOff_Location)
+                                VALUES({booking.num_days}, "{booking.start_date}", "{booking.end_date}", {locationIDs[0]}, {locationIDs[1]})
+                                '''))
+    

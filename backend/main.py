@@ -101,5 +101,9 @@ async def get_jets_to_inspect(db: _orm.Session = _fastapi.Depends(_services.get_
 
 
 @app.post("/inspection/create")
-async def create_report(report: _schemas.IR, db: _orm.Session = _fastapi.Depends(_services.get_db)):
+async def create_report(report: _schemas.IRCreate, db: _orm.Session = _fastapi.Depends(_services.get_db)):
     return await _services.Inspection.create_inspection_report(report, db)
+
+@app.post("/booking/create")
+async def create_booking(booking: _schemas.BookingCreate, db: _orm.Session = _fastapi.Depends(_services.get_db)):
+    await _services.Booking.create_booking(booking, db)

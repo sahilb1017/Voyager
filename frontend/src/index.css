@@ -2,3 +2,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body{
+    background-color: black;
+}
+
+.rec.rec-dot {
+    background: grey;
+    border: 2px grey solid;
+}
+.rec.rec-dot_active, .rec-dot:focus, .rec-dot:hover, .rec.rec-dot_active:focus, .rec.rec-dot_active:hover{
+    background: #87A1FF;
+    box-shadow: 0 0 1px 3px #87A1FF;
+    border: 2px #87A1FF;
+}
+
+button.rec-dot:hover, button.rec-dot:active, button.rec-dot:focus  {
+    background: #87A1FF;
+    box-shadow: 0 0 1px 3px #87A1FF;
+    border: 2px #87A1FF;
+  }
+
+  .rec.rec-arrow-left:hover:enabled,
+  .rec.rec-arrow-right:hover:enabled{
+      background-color: #87A1FF;
+      box-shadow: 0 0 1px 3px #87A1FF;
+  }
+
+  .faq-row-wrapper.faq-body.faq-row{
+    padding-bottom: 50px;
+  }
+
+  

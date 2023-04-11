@@ -9,6 +9,7 @@ export default {
       colors:{
         'main-blue': '#87A1FF',
         'main-grey':'#353535',
+        'card-grey': '#1E1E1E'
       },
       fontFamily:{
         latoFont:"'Lato', serif"

@@ -24,16 +24,65 @@ export function AppWrapper({ children }) {
   }, [user]);
 
   const logout = () => {
-    const url = `${process.env.NEXT_PUBLIC_URL}/authentication/logout`;
-        Axios.get(url)
-        .then((response)=>{
-            setUser({});
-            localStorage.clear();
-            navigate("/");
-        })
-        .catch((error)=>{
-            console.log(error);
-        })
+    setUser({});
+    localStorage.clear();
+    navigate("/");    
+  }
+
+  const logIn = (loginInfo) => {
+    const url = "localhost:8000/account/login";
+    Axios.post(url, loginInfo)
+    .then((response)=>{
+        setUser(response);
+        if(response.acc_type === "User"){
+            navigate("/Browse");
+        }
+        if(response.acc_type === "Company"){
+            navigate("/MyVehicles");
+        }
+        if(response.acc_type === "Inspector"){
+            navigate("/Inspect");
+        }   
+    })
+    .catch((error)=>{
+        navigate("/");  
+        console.log(error);
+    })
+  }
+
+  const register = (registerInfo) => {
+    const url = "localhost:8000/account/register";
+    Axios.post(url, registerInfo)
+    .then((response)=>{
+        setUser(response);
+        navigate('/type');   
+    })
+    .catch((error)=>{
+        navigate("/");  
+        console.log(error);
+    })
+  }
+
+  const registerInfo = (registerInfo, type) => {
+    const url = "localhost:8000/account/update";
+    Axios.post(url, registerInfo)
+    .then((response)=>{
+        setUser(response);
+        navigate('/type');
+        if(response.acc_type === "User"){
+            navigate("/Browse",{state: {"userType": "User"}});
+        }
+        if(response.acc_type === "Company"){
+            navigate("/MyVehicles",{state: {"userType": "Company"}});
+        }
+        if(response.acc_type === "Inspector"){
+            navigate("/Inspect",{state: {"userType": "Inspector"}});
+        }   
+    })
+    .catch((error)=>{
+        navigate("/");  
+        console.log(error);
+    })
   }
 
   return (

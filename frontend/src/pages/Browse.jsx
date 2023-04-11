@@ -7,7 +7,9 @@ function Browse() {
         <LandingNav 
             type="User"
         />
-        <p className="text-white text-3xl font-bold pb-8">Notable Brands</p>
+        <div className="lg:mr-56 lg:ml-56 lg:mb-20 pt-12">
+            <p className="text-white text-3xl font-bold pb-8">Browse</p>
+        </div>
     
     </div>
   )

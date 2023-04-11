@@ -8,7 +8,7 @@ export default {
     extend: {
       colors:{
         'main-blue': '#87A1FF',
-        'main-grey':'#353535'
+        'main-grey':'#353535',
       },
       fontFamily:{
         latoFont:"'Lato', serif"

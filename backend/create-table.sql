@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS VEHICLE (
     Cleaner_ID INTEGER,
     Owner_ID TEXT ,
     Date_Posted TEXT,
+    Type TEXT,
     FOREIGN KEY(Mechanic_ID) REFERENCES MECHANIC(Mechanic_ID),
     FOREIGN KEY(Cleaner_ID) REFERENCES CLEANER(Cleaner_ID),
     FOREIGN KEY(Owner_ID) REFERENCES ACCOUNT(Email_ID)
@@ -101,7 +102,7 @@ CREATE TABLE IF NOT EXISTS BOOKING (
     Start_Date TEXT ,
     End_Date  TEXT ,
     PickUp_Location INTEGER ,
-    DropOff_Location INTEGER ,
+    DropOff_Location INTEGER , 
     FOREIGN KEY(PickUp_Location) REFERENCES LOCATION(Location_ID),
     FOREIGN KEY(DropOff_Location) REFERENCES LOCATION(Location_ID)
 );

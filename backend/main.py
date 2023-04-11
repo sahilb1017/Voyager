@@ -118,3 +118,23 @@ async def find_coupon(coupon: _schemas.Coupon, db:  _orm.Session = _fastapi.Depe
         raise _fastapi.HTTPException(status_code=404, detail="Coupon does not exist")
     
     return coupon
+
+
+@app.post("/booking/get-booked")
+async def get_booked(user: _schemas.RetrieveInfo, db:  _orm.Session = _fastapi.Depends(_services.get_db)):
+    return await _services.Booking.get_booked_vehicles(user, db)
+
+
+@app.post("/inspection/get-pending")
+async def get_pending(user: _schemas.RetrieveInfo, db:  _orm.Session = _fastapi.Depends(_services.get_db)):
+    return await _services.Inspection.get_pending(user, db)
+
+
+@app.post("/inspection/get-approved")
+async def get_approved(user: _schemas.RetrieveInfo, db:  _orm.Session = _fastapi.Depends(_services.get_db)):
+    return await _services.Inspection.get_approved(user, db)
+
+
+@app.post("/inspection/get-booked")
+async def get_booked(user: _schemas.RetrieveInfo, db:  _orm.Session = _fastapi.Depends(_services.get_db)):
+    return await _services.Inspection.get_booked(user, db)

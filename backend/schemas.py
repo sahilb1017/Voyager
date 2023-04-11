@@ -156,3 +156,37 @@ class CouponSend(_CouponBase):
     discount: int
     class Config:
         orm_mode = True  
+
+class RetrieveInfo(_pydantic.BaseModel):
+    email: str
+    class Config:
+        orm_mode = True  
+
+
+
+class BookedVehicle(_pydantic.BaseModel):
+    num_passengers: int
+    mileage: str
+    model: str
+    make: str
+    color: str
+    price: str   
+    date_posted: str   
+    start_date: str
+    end_date: str
+    pickup: str
+    dropoff: str
+    type: str
+    class Config:
+        orm_mode = True  
+
+
+class Pending(_pydantic.BaseModel):
+    num_passengers: int
+    mileage: str
+    model: str
+    make: str
+    color: str
+    price: str   
+    date_posted: str   
+    type: str    

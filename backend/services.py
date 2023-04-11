@@ -67,7 +67,7 @@ async def update_account(account: _schemas.Account, db: _orm.Session):
         postal_Code=found_user.Postal_Code, street=found_user.Street, province=found_user.Province, acc_type=found_user.User_Type
     )
     
-    return await user_obj
+    return user_obj
 
 
 async def create_user(user: _schemas.User, db: _orm.Session):
@@ -126,7 +126,8 @@ class Vehicles:
                                     {mechanic_id},
                                     {cleaner_id},
                                     "{vehicle.owner_id}",
-                                    "{today}"
+                                    "{today}",
+                                    "{vehicle.vehicle_type}"
                                 )'''))
         db.commit()
 
@@ -345,6 +346,50 @@ class Inspection:
 
         return report;
 
+    async def get_pending(user: _schemas.RetrieveInfo, db:  _orm.Session):
+        to_send = []
+        pending = db.execute(_sql.sql.text(f'SELECT * FROM VEHICLE WHERE Reviewed = 0 AND Owner_ID = "{user.email}"'))
+
+        for p in pending:
+            x = _schemas.Pending(
+                num_passengers=p.Num_Of_Passengers, mileage=p.Mileage, model=p.Model, make=p.Make, color=p.Color, price=p.Price, 
+                date_posted=p.Date_Posted, type=p.Type
+            )
+            to_send.append(x)
+        return to_send
+    
+    async def get_approved(user: _schemas.RetrieveInfo, db:  _orm.Session):
+        to_send = []
+        approved = db.execute(_sql.sql.text(f'SELECT * FROM VEHICLE WHERE Reviewed = 1 AND Availability = 1 AND Owner_ID = "{user.email}"'))
+
+        for p in approved:
+            x = _schemas.Pending(
+                num_passengers=p.Num_Of_Passengers, mileage=p.Mileage, model=p.Model, make=p.Make, color=p.Color, price=p.Price, 
+                date_posted=p.Date_Posted, type=p.Type
+            )
+            to_send.append(x)
+        return to_send
+    
+    async def get_booked(user: _schemas.RetrieveInfo, db:  _orm.Session):
+        to_send = []
+        approved = db.execute(_sql.sql.text(f'SELECT * FROM (VEHICLE AS v JOIN BOOKS AS b ON v.REG_NUM = b.Vehicle_ID) JOIN BOOKING AS q ON q.Booking_ID = b.Booking_ID WHERE v.Owner_ID = "{user.email}" AND v.Availability = 0'))
+
+        for b in approved:
+            streets = []
+            locations = db.execute(_sql.sql.text(f'SELECT Street FROM LOCATION WHERE Location_ID = {b.PickUp_Location} OR Location_ID = {b.DropOff_Location}'))
+            for l in locations:
+                streets.append(l.Street)
+            
+            x = _schemas.BookedVehicle(
+                num_passengers=b.Num_Of_Passengers, mileage=b.Mileage, model=b.Model, make=b.Make, color=b.Color, price=b.Price, 
+                date_posted=b.Date_Posted, start_date=b.Start_Date, end_date=b.End_Date, pickup=streets[0], dropoff=streets[1], type=b.Type
+            )
+
+            to_send.append(x)
+
+        return to_send
+            
+
 
 class Booking:
     async def create_booking(booking: _schemas.BookingCreate, db: _orm.Session):
@@ -407,3 +452,25 @@ class Booking:
         return _schemas.CouponSend(
             coupon=found_coupon.Coupon_ID, discount=found_coupon.Discount
         )
+    
+
+    async def get_booked_vehicles(user: _schemas.RetrieveInfo, db: _orm.Session):
+        to_send = list()
+
+        booked = db.execute(_sql.sql.text(f'''SELECT * FROM (BOOKS AS B JOIN BOOKING AS q ON b.Booking_ID = q.Booking_ID) 
+                                          JOIN VEHICLE as v on b.Vehicle_ID = v.REG_NUM WHERE b.Email_ID = "{user.email}"'''))
+        
+        for b in booked:
+            streets = []
+            locations = db.execute(_sql.sql.text(f'SELECT Street FROM LOCATION WHERE Location_ID = {b.PickUp_Location} OR Location_ID = {b.DropOff_Location}'))
+            for l in locations:
+                streets.append(l.Street)
+            
+            x = _schemas.BookedVehicle(
+                num_passengers=b.Num_Of_Passengers, mileage=b.Mileage, model=b.Model, make=b.Make, color=b.Color, price=b.Price, 
+                date_posted=b.Date_Posted, start_date=b.Start_Date, end_date=b.End_Date, pickup=streets[0], dropoff=streets[1], type=b.Type
+            )
+
+            to_send.append(x)
+        return to_send
+    

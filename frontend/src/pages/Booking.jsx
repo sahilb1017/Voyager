@@ -28,7 +28,7 @@ import { useLocation } from 'react-router-dom'
 export default function Booking() {
 
     const [form,setForm] = useState({start:"",end:""})
-    const[information,setInformation] = useState({date:"",capacity:0,color:"",mileage:"",extra:"", cleanliness:"", damage:"",review:"",price:""})
+    const[information,setInformation] = useState({capacity:0,color:"",mileage:"",extra:"", cleanliness:"", damage:"",review:"",price:""})
     const[open,setOpen] = useState(false)
     const[openPick,setOpenPick] = useState(false)
     const[openDrop,setOpenDrop] = useState(false)
@@ -388,7 +388,7 @@ export default function Booking() {
                 onClick={handleConfirmationClose}
                 >
                 <div>
-                    <BookingConfirmation form = {form} information = {information} pick = {pick} drop = {drop} open = {open}/>
+                    <BookingConfirmation form = {form} information = {information} pick = {pick} drop = {drop} open = {open} other={from}/>
                 </div>
             </Backdrop>
             <Backdrop

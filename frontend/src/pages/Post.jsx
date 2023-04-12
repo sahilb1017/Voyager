@@ -24,18 +24,26 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Select from "react-select"
 import LandingNav from '../components/LandingNav'
-
+import { useAppContext } from '../../context/userContext'
+import Axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 
 
 
 
 export default function InspectionReport() {
-
+    const navigate = useNavigate();
     const[information,setInformation] = useState({type:"",brand:"",model:"",registration:"", license:"",passenger:-1,colour:"",mileage:"",units:"",price:"",extra:""})
     const[image,setImage] = useState()
     const[placeholder,setPlaceholder] = useState("-------------------------")
-    console.log(information)
+    const {user, setUser} = useAppContext();
+
+    useEffect(() => {
+       
+    },[user])
+    
+
     const mileageOptions=[
         {
             name: "mpg",
@@ -45,6 +53,10 @@ export default function InspectionReport() {
             name: "kpl",
             val:  "kpl"
         }, 
+        {
+            name: "miles",
+            val:  "miles"
+        }
       ]
     
     const vehicleOptions=[
@@ -237,14 +249,40 @@ export default function InspectionReport() {
             invalidPriceToast()
         }
         else{
-            var mileage = information.mileage+information.units
+            var mileageNew = information.mileage+information.units
+            const url = "http://localhost:8000/vehicles/create";
+            const obj = {
+                reg_num: information.registration,
+                license: information.license,
+                num_passengers: information.passenger,
+                mileage: mileageNew,
+                model: information.model,
+                make: information.brand,
+                color: information.colour,
+                price: information.price + "/Day",
+                owner_id: user.data.email,
+                vehicle_type: information.type,
+                extra: information.extra
+            }
+            console.log(obj);
+            try {
+                Axios.post(url, obj)
+                .then((response) => {
+                    navigate("/MyVehicles");
+                }) 
+                .catch((error)=>{
+                    alert("no")
+                })
+            } catch (error) {
+                
+            }
         }
       }
 
     return (
         <div className="h-full w-full">
             <LandingNav 
-            type="User"
+                type={user.data.acc_type}
             />
             <div className = "flex flex-col items-center justify-center"> 
                 <div className = "w-[80%]">
@@ -392,7 +430,7 @@ export default function InspectionReport() {
                                
             </div>
             <div className = "flex flex-row justify-center items-center w-full">
-                <button  className="bg-main-blue text-white text-xl rounded-3xl w-32 h-12  mt-16 hover:bg-[#5f82ff]">
+                <button  className="bg-main-blue text-white text-xl rounded-3xl w-32 h-12  mt-16 hover:bg-[#5f82ff]" onClick={submitHandler}>
                     Post
                 </button>  
                 <ToastContainer hideProgressBar={true}/>

@@ -7,24 +7,28 @@ import Select from "react-select"
 import { useEffect } from "react"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Axios from "axios";
+import { useAppContext } from '../../context/userContext'
 
 
+export default function BookingConfirmation({form,information,pick,drop,open, other}) {
 
-export default function BookingConfirmation({form,information,pick,drop,open}) {
-
-    const[coupon,setCoupon] = useState("")
+    const {logIn, setUser, user} = useAppContext();
+    const[couponID,setCouponID] = useState(0)
     const[couponVal,setCouponVal] = useState(0)
-    const[insurance,setInsurance] = useState({name:"",price:0})
+    const[insurance,setInsurance] = useState({name:"",price:0, index:0})
     const[price,SetPrice] = useState(0.00.toFixed(2))
+    const [num, setNum] = useState(0)
     console.log(insurance)
     useEffect(() => {
       
         const date1 = new Date(form.start)
         const date2 = new Date(form.end)
         const dayPrice = insurance.price.replace(/\D/g,'');
+        setNum(Math.ceil(Math.abs(date2 - date1)/ (1000 * 60 * 60 * 24)))
         SetPrice((Math.ceil(Math.abs(date2 - date1)/ (1000 * 60 * 60 * 24))*(parseInt(dayPrice))+insurance.price)-couponVal)
         
-      },[open,insurance]);
+      },[open,insurance,couponVal]);
 
     const invalidCouponToast = () => {
         toast.error('Invalid coupon', {
@@ -39,28 +43,45 @@ export default function BookingConfirmation({form,information,pick,drop,open}) {
 
     const handleInputChange = (event) => {
         const { value } = event.target;
-        setCoupon(value);
+        setCouponID(value);
       };
 
 
     const insuranceOptions=[
         {
             name: "No Insurance",
-            price: 0
+            price: 0,
+            index: 0
         },
         {
-            name: "Voyage Insurance",
-            price:200
+            name: "Voyager Insurance",
+            price:200, 
+            index: 1
 
         },
         {
-            name: "Odyssey",
-            price:400
+            name: "Odyssey Insurance",
+            price:400, 
+            index: 2
         },
       ]
 
       function couponHandler(){
-        setCouponVal(5)
+        
+        const url = "http:localhost:3000/booking/find-coupon";
+        try {
+            Axios.post(url, {coupon:couponID})
+            .then((response)=>{
+                setCouponVal(response.data.discount);
+            })
+            .catch((error)=>{
+                console.log(error)
+            })
+        } catch (error) {
+            
+            invalidCouponToast();
+            
+        }
       }
 
     
@@ -202,7 +223,7 @@ export default function BookingConfirmation({form,information,pick,drop,open}) {
                                                 Coupon
                                             </h1>
                                             <div className="flex flex-row justify-start items-center gap-x-8">
-                                                <input type="text" name="coupon" value = {coupon} onChange = {handleInputChange} placeholder="Coupon" className=" px-4 h-8 w-3/4 bg-black text-white rounded-lg  border-2 border-main-blue outline-none hover:border-[3px] hover:border-main-blue focus:border-[3px] focus:border-main-blue"/>      
+                                                <input type="number" name="coupon" value = {couponID} onChange = {handleInputChange} placeholder="Coupon" className=" px-4 h-8 w-3/4 bg-black text-white rounded-lg  border-2 border-main-blue outline-none hover:border-[3px] hover:border-main-blue focus:border-[3px] focus:border-main-blue"/>      
                                                 <button onClick={couponHandler} className="bg-main-blue text-white rounded-lg w-20 h-8 hover:bg-[#5f82ff]">
                                                     Apply 
                                                 </button>                                      
@@ -242,3 +263,4 @@ export default function BookingConfirmation({form,information,pick,drop,open}) {
         </div>
   );
 }
+

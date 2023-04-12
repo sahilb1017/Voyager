@@ -47,14 +47,15 @@ function MyVehicles() {
   return (
     <div>
         <LandingNav 
-            type="User"
+            type={user.data.acc_type}
         />
         <div className="lg:mr-56 lg:ml-56 lg:mb-20 pt-12">
             <p className="text-white text-3xl font-bold pb-8">My Vehicles</p>
             
             <div className="mb-12">
               <p className="text-white text-2xl font-bold pb-8">Pending Vehicles</p>
-              <CarouselDisplay 
+              <CarouselDisplay
+                card_type="MyVehicle"
                 vehicle={pending}
               />
             </div>
@@ -62,6 +63,7 @@ function MyVehicles() {
             <div className="mb-12">
               <p className="text-white text-2xl font-bold pb-8">Approved Vehicles</p>
               <CarouselDisplay 
+                card_type="MyVehicle"
                 vehicle={approved}
               />
             </div>

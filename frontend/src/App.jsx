@@ -12,7 +12,7 @@ import MyVehicles from "./pages/MyVehicles";
 import InspectionReport from "./pages/InspectionReport";
 import Post from "./pages/Post";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
-
+import { AppWrapper } from "../context/userContext.jsx";
 
 export default function App() {
   return (

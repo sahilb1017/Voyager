@@ -31,11 +31,11 @@ export default function LandingNav(props) {
               FAQ
               <span class="block max-w-0 group-hover:max-w-full transition-all duration-400 h-0.5 bg-main-blue"></span>
             </Link>
-            <Link to="/" class="group transition duration-300 block mt-4 lg:inline-block lg:mt-0 text-main-blue mr-12">
+            <Link to="/Login" class="group transition duration-300 block mt-4 lg:inline-block lg:mt-0 text-main-blue mr-12">
               Login
               <span class="block max-w-0 group-hover:max-w-full transition-all duration-400 h-0.5 bg-main-blue"></span>
             </Link>
-            <Link to="/" class="group transition duration-300 block mt-4 lg:inline-block lg:mt-0 text-main-blue">
+            <Link to="/SignUp" class="group transition duration-300 block mt-4 lg:inline-block lg:mt-0 text-main-blue">
               Signup
               <span class="block max-w-0 group-hover:max-w-full transition-all duration-400 h-0.5 bg-main-blue"></span>
             </Link>

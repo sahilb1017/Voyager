@@ -414,8 +414,8 @@ class Booking:
             locationIDs.append(l.Location_ID)
 
         #Create booking row in BOOKING table
-        db.execute(_sql.sql.text(f'''INSERT INTO BOOKING(Number_Days, Start_Date, End_Date, PickUp_Location, DropOff_Location)
-                                VALUES({booking.num_days}, "{booking.start_date}", "{booking.end_date}", {locationIDs[1]}, {locationIDs[0]})
+        db.execute(_sql.sql.text(f'''INSERT INTO BOOKING(Number_Days, Start_Date, End_Date, PickUp_Location, DropOff_Location, Insurance_ID, Coupon_ID)
+                                VALUES({booking.num_days}, "{booking.start_date}", "{booking.end_date}", {locationIDs[1]}, {locationIDs[0]}, {booking.insurance_id}, {booking.coupon_id})
                                 '''))
         db.commit()
 
@@ -426,8 +426,8 @@ class Booking:
         for b in bookingss:
             bookingID = b.Booking_ID
         
-        db.execute(_sql.sql.text(f'''INSERT INTO BILL(Booking_ID, Cost, Bill_Date, Discount_Applied, Insurance_ID, Coupon_ID)
-                                VALUES({bookingID}, {booking.cost}, "{today}", {booking.discount}, {booking.insurance_id}, {booking.coupon_id})
+        db.execute(_sql.sql.text(f'''INSERT INTO BILL(Booking_ID, Cost, Bill_Date, Discount_Applied)
+                                VALUES({bookingID}, {booking.cost}, "{today}", {booking.discount})
                                 '''))
         db.commit()
 

@@ -13,17 +13,18 @@ import 'react-toastify/dist/ReactToastify.css';
 export default function BookingConfirmation({form,information,pick,drop,open}) {
 
     const[coupon,setCoupon] = useState("")
-    const[insurance,setInsurance] = useState({name:""})
+    const[couponVal,setCouponVal] = useState(0)
+    const[insurance,setInsurance] = useState({name:"",price:0})
     const[price,SetPrice] = useState(0.00.toFixed(2))
-
+    console.log(insurance)
     useEffect(() => {
       
         const date1 = new Date(form.start)
         const date2 = new Date(form.end)
-        SetPrice(Math.ceil(Math.abs(date2 - date1)/ (1000 * 60 * 60 * 24))*information.price)
+        SetPrice((Math.ceil(Math.abs(date2 - date1)/ (1000 * 60 * 60 * 24))*information.price+insurance.price)-couponVal)
         setCoupon("")
         
-      },[open]);
+      },[open,insurance]);
 
     const invalidCouponToast = () => {
         toast.error('Invalid coupon', {
@@ -38,24 +39,28 @@ export default function BookingConfirmation({form,information,pick,drop,open}) {
 
     const handleInputChange = (event) => {
         const { value } = event.target;
-        setCoupon(value);
+        setCoupon(v);
       };
 
 
     const insuranceOptions=[
         {
             name: "No Insurance",
+            price: 0
         },
         {
             name: "Voyage Insurance",
+            price:200
+
         },
         {
             name: "Odyssey",
+            price:400
         },
       ]
 
       function couponHandler(){
-        SetPrice(price/2)
+        setCouponVal(5)
       }
 
     

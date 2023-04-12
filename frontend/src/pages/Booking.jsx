@@ -309,7 +309,7 @@ export default function Booking() {
                             </div>
                             <div className = "flex flex-col justify-start items-start h-full gap-y-4">
                                 <div className = "flex flex-row justify-center items-center gap-x-3">
-                                    <img src ={Clean} className="w-[25px]"></img>
+                                    <img src ={Clean} className="w-[20px]"></img>
                                     <h2 className="text-white text-base"> 4 - Great Cleanliness</h2>
                                 </div>
                                 <div className = "flex flex-row justify-center items-center gap-x-3">
@@ -320,9 +320,9 @@ export default function Booking() {
                                     <img src ={Review} className="w-[20px]"></img>
                                     <h2 className="text-white text-base"> Excellent Overall Condition</h2>
                                 </div>
-                                <div className = "flex flex-row justify-center items-center gap-x-3">
-                                    <img src ={Price} className="w-[10px]"></img>
-                                    <h2 className="text-white text-base">$69/day</h2>
+                                <div className = "flex flex-row justify-center items-center gap-x-3 ml-1">
+                                    <img src ={Price} className="w-[10px] m-auto"></img>
+                                    <h2 className="text-white text-base ml-2">$69/day</h2>
                                 </div>
                                 <div className = "mt-8">
                                     <h1 className = "text-white text-base mb-1 ml-1 ">

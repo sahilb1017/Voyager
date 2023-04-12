@@ -5,12 +5,11 @@ import { useNavigate } from "react-router-dom";
 const AppContext = createContext();
 
 export function AppWrapper({ children }) {
-  const navigate = useNavigate();
   const [user, setUser] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const storedUser = cookies.getItem('user');
+    const storedUser = localStorage.getItem('user');
     if (storedUser && Object.keys(storedUser).length > 0) {
       setUser(storedUser);
     }
@@ -26,7 +25,7 @@ export function AppWrapper({ children }) {
   const logout = () => {
     setUser({});
     localStorage.clear();
-    navigate("/");    
+    //navigate("/");    
   }
 
   const logIn = (loginInfo) => {
@@ -34,19 +33,21 @@ export function AppWrapper({ children }) {
     Axios.post(url, loginInfo)
     .then((response)=>{
         setUser(response);
-        if(response.acc_type === "User"){
-            navigate("/Browse");
-        }
-        if(response.acc_type === "Company"){
-            navigate("/MyVehicles");
-        }
-        if(response.acc_type === "Inspector"){
-            navigate("/Inspect");
-        }   
+        return (response.acc_type);
+        // if(response.acc_type === "User"){
+        //     //navigate("/Browse");
+        // }
+        // if(response.acc_type === "Company"){
+        //     //navigate("/MyVehicles");
+        // }
+        // if(response.acc_type === "Inspector"){
+        //     //navigate("/Inspect");
+        // }   
     })
     .catch((error)=>{
-        navigate("/");  
+        //navigate("/");  
         console.log(error);
+        return (null);
     })
   }
 
@@ -55,10 +56,10 @@ export function AppWrapper({ children }) {
     Axios.post(url, registerInfo)
     .then((response)=>{
         setUser(response);
-        navigate('/type');   
+        //navigate('/type');   
     })
     .catch((error)=>{
-        navigate("/");  
+        //navigate("/");  
         console.log(error);
     })
   }
@@ -68,25 +69,25 @@ export function AppWrapper({ children }) {
     Axios.post(url, registerInfo)
     .then((response)=>{
         setUser(response);
-        navigate('/type');
+        //navigate('/type');
         if(response.acc_type === "User"){
-            navigate("/Browse",{state: {"userType": "User"}});
+            //navigate("/Browse",{state: {"userType": "User"}});
         }
         if(response.acc_type === "Company"){
-            navigate("/MyVehicles",{state: {"userType": "Company"}});
+            //navigate("/MyVehicles",{state: {"userType": "Company"}});
         }
         if(response.acc_type === "Inspector"){
-            navigate("/Inspect",{state: {"userType": "Inspector"}});
+            //navigate("/Inspect",{state: {"userType": "Inspector"}});
         }   
     })
     .catch((error)=>{
-        navigate("/");  
+        //navigate("/");  
         console.log(error);
     })
   }
 
   return (
-    <AppContext.Provider value={{ user, setUser, isLoading, setIsLoading}}>
+    <AppContext.Provider value={{ user, setUser, isLoading, setIsLoading, logout, register, registerInfo, logIn}}>
       {children}
     </AppContext.Provider>
   );

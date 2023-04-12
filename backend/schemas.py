@@ -217,3 +217,42 @@ class Pending(_pydantic.BaseModel):
     price: str   
     date_posted: str   
     type: str    
+
+
+class InspectionDetails(_pydantic.BaseModel):
+    num_passengers: int
+    mileage: str
+    model: str
+    make: str
+    color: str
+    price: str   
+    date_posted: str   
+    vehicle_type: str 
+    cleanliness: str
+    damages: str
+    overall: str
+
+class InspectionCar(InspectionDetails):
+    type: str
+    class Config:
+        orm_mode = True 
+
+class InspectionTruck(InspectionDetails):
+    tonnage: str
+    class Config:
+        orm_mode = True 
+
+class InspectionBoat(InspectionDetails):
+    knots: str
+    class Config:
+        orm_mode = True 
+
+class InspectionMotorcycle(InspectionDetails):
+    cc: str
+    class Config:
+        orm_mode = True 
+
+class InspectionJet(InspectionDetails):
+    tbo: str
+    class Config:
+        orm_mode = True 

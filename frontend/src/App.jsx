@@ -17,23 +17,26 @@ import { AppWrapper } from "../context/userContext.jsx";
 export default function App() {
   return (
     <div className="w-screen h-screen bg-black ">
-      <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/Login"element = {<Login/>}/>
-          <Route path="/SignUp"element = {<SignUp/>}/>
-          <Route path="/SelectUser"element = {<SelectUser/>}/>
-          <Route path="/RegisterUser"element = {<RegisterUser/>}/>
-          <Route path="/RegisterCompany" element = {<RegisterCompany/>}/>
-          <Route path="/Booking"element = {<Booking/>}/>
-          <Route path="/Browse" element={<Browse />} />
-          <Route path="/Inspect" element={<Inspect />} />
-          <Route path="/MyRentals" element={<MyRentals />} />
-          <Route path="/MyVehicles" element={<MyVehicles />} />
-          <Route path="/InspectionReport"element = {<InspectionReport/>}/>
-          <Route path="/Post"element = {<Post/>}/>
-        </Routes>
-      </Router>
+      <AppWrapper>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/Login"element = {<Login/>}/>
+            <Route path="/SignUp"element = {<SignUp/>}/>
+            <Route path="/SelectUser"element = {<SelectUser/>}/>
+            <Route path="/RegisterUser"element = {<RegisterUser/>}/>
+            <Route path="/RegisterCompany" element = {<RegisterCompany/>}/>
+            <Route path="/Booking"element = {<Booking/>}/>
+            <Route path="/Browse" element={<Browse />} />
+            <Route path="/Inspect" element={<Inspect />} />
+            <Route path="InspectionReport" element={<InspectionReport />}/>
+            <Route path="/MyRentals" element={<MyRentals />} />
+            <Route path="/MyVehicles" element={<MyVehicles />} />
+            <Route path="/InspectionReport"element = {<InspectionReport/>}/>
+            <Route path="/Post"element = {<Post/>}/>
+          </Routes>
+        </Router>
+      </AppWrapper>
     </div>
   )
 }

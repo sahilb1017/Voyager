@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import BookingNav from '../components/BookingNav'
+import LandingNav from '../components/LandingNav'
 import Car from "/Test.png"
 import Calandar from "/calandar.png"
 import Human from "/human.png"
@@ -20,6 +20,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Backdrop } from '@mui/material';
 import BookingConfirmation from '../components/BookingConfirmation'
 import LocationModel from '../components/LocationModel'
+import { useLocation } from 'react-router-dom'
 
 
 
@@ -27,12 +28,14 @@ import LocationModel from '../components/LocationModel'
 export default function Booking() {
 
     const [form,setForm] = useState({start:"",end:""})
-    const[information,setInformation] = useState({date:"",copacity:"",color:"",mileage:"",type:"", cleanliness:"", damage:"",review:"",price:0})
+    const[information,setInformation] = useState({date:"",capacity:0,color:"",mileage:"",extra:"", cleanliness:"", damage:"",review:"",price:""})
     const[open,setOpen] = useState(false)
     const[openPick,setOpenPick] = useState(false)
     const[openDrop,setOpenDrop] = useState(false)
     const[drop,setDrop] = useState({city:"",postal:"",street:"",province:""})
     const[pick,setPick] = useState({city:"",postal:"",street:"",province:""})
+    const location = useLocation()
+    const { from } = location.state
 
 
     function handleConfirmationBackDrop(){
@@ -59,17 +62,21 @@ export default function Booking() {
     }
 
     useEffect(() => {
-      
       setInformation({
-        date:"Feb 20,2023",
-        capacity:"5",
-        color:"White",
-        mileage:"272",
-        type:"Sedan",
-        cleanliness:"4 - Great Cleanliness",
-        damage:"5 - No Damage",
-        review:"Excellent Overall Condition",
-        price:69
+        date:from.date_posted,
+        capacity:from.num_passengers,
+        color:from.color,
+        mileage:from.mileage,
+        cleanliness:from.cleanliness,
+        damage:from.damages,
+        review:from.overall,
+        price:from.price,
+
+        extra: from.vehicle_type == "Car" ? from.type :
+                from.vehicle_type  == "Truck" ? from.tonnage :
+                from.vehicle_type  == "Motorcycle" ? from.cc :
+                from.vehicle_type  == "Boat" ? from.knots :
+                from.tbo
       })
       
     },[]);
@@ -239,12 +246,12 @@ export default function Booking() {
 
     return (
         <div className="h-full w-full">
-            <BookingNav/>
+            <LandingNav type="User"/>
             <div className = "flex flex-col items-center justify-center"> 
                 <div className = "w-[80%]">
                     <div className = "flex flex-row ml-[1.7rem] mt-16">
                         <h1 className ='text-3xl text-white font-bold'>
-                            Tesla Model 3 2021
+                            {from.make} {from.model}
                         </h1>
                     </div>
                     <div className="flex flex-row items-center justify-center pt-10">
@@ -253,23 +260,23 @@ export default function Booking() {
                             <div className = "flex flex-col justify-start items-start h-full gap-y-4">
                                 <div className = "flex flex-row justify-center items-center gap-x-3">
                                     <img src ={Calandar} className="w-[25px] h-[25px]"></img>
-                                    <h2 className="text-white text-base"> Feb 20,2023</h2>
+                                    <h2 className="text-white text-base">{information.date}</h2>
                                 </div>
                                 <div className = "flex flex-row justify-center items-center gap-x-3">
                                     <img src ={Human} className="w-[25px] h-[25px]"></img>
-                                    <h2 className="text-white text-base"> 5 Adults</h2>
+                                    <h2 className="text-white text-base">{information.capacity} Adults</h2>
                                 </div>
                                 <div className = "flex flex-row justify-center items-center gap-x-3">
                                     <img src ={Colour} className="w-[25px] h-[25px]"></img>
-                                    <h2 className="text-white text-base"> White</h2>
+                                    <h2 className="text-white text-base">{information.color}</h2>
                                 </div>
                                 <div className = "flex flex-row justify-center items-center gap-x-3">
                                     <img src ={Mileage} className="w-[23px] h-[23px]"></img>
-                                    <h2 className="text-white text-base">272 Miles</h2>
+                                    <h2 className="text-white text-base">{information.mileage}</h2>
                                 </div>
                                 <div className = "flex flex-row justify-center items-center gap-x-3">
                                     <img src ={Information} className="w-[25px]"></img>
-                                    <h2 className="text-white text-base">Sedan</h2>
+                                    <h2 className="text-white text-base">{information.extra}</h2>
                                 </div>
                                 <div className = "-mt-2">
                                     <h1 className = "text-white text-base mb-1 ml-1 ">
@@ -310,19 +317,19 @@ export default function Booking() {
                             <div className = "flex flex-col justify-start items-start h-full gap-y-4">
                                 <div className = "flex flex-row justify-center items-center gap-x-3">
                                     <img src ={Clean} className="w-[20px]"></img>
-                                    <h2 className="text-white text-base"> 4 - Great Cleanliness</h2>
+                                    <h2 className="text-white text-base">{information.cleanliness}</h2>
                                 </div>
                                 <div className = "flex flex-row justify-center items-center gap-x-3">
                                     <img src ={Damage} className="w-[20px]"></img>
-                                    <h2 className="text-white text-base"> 5 - No Damage</h2>
+                                    <h2 className="text-white text-base">{information.damage}</h2>
                                 </div>
                                 <div className = "flex flex-row justify-center items-center gap-x-3">
                                     <img src ={Review} className="w-[20px]"></img>
-                                    <h2 className="text-white text-base"> Excellent Overall Condition</h2>
+                                    <h2 className="text-white text-base">{information.review}</h2>
                                 </div>
                                 <div className = "flex flex-row justify-center items-center gap-x-3 ml-1">
                                     <img src ={Price} className="w-[10px] m-auto"></img>
-                                    <h2 className="text-white text-base ml-2">$69/day</h2>
+                                    <h2 className="text-white text-base ml-2">{information.price}</h2>
                                 </div>
                                 <div className = "mt-8">
                                     <h1 className = "text-white text-base mb-1 ml-1 ">

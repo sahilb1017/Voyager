@@ -15,11 +15,16 @@ import 'react-toastify/dist/ReactToastify.css';
 import Select from "react-select"
 import LandingNav from '../components/LandingNav'
 import { useLocation } from 'react-router-dom'
+import Axios from "axios";
+import { useAppContext } from '../../context/userContext'
+import { useNavigate } from "react-router-dom";
 
 
 export default function InspectionReport() {
+    const navigate = useNavigate();
     const location = useLocation()
     const { from } = location.state
+    const {user, setUser} = useAppContext();
 
     const [report,setReport] = useState({clean:"",damage:"",review:"",decision:-1})
     const[information,setInformation] = useState({date:"",capacity:0,color:"",mileage:"",price:""})
@@ -194,7 +199,28 @@ export default function InspectionReport() {
             emptyFieldToast()
         }
         else{
-
+            const url = "http://localhost:8000/inspection/create"
+            const obj = {
+                damages: report.damage,
+                cleanliness: report.clean,
+                overall: report.review,
+                inspector_email: user.data.email,
+                vehicle_reg: from.reg_num,
+                decision: report.decision,
+                type: from.vehicle_type
+            }
+            console.log(obj);
+            try {
+                Axios.post(url, obj)
+                .then((response) => {
+                    navigate("/Inspect");
+                }) 
+                .catch((error)=>{
+                    alert("no")
+                })
+            } catch (error) {
+                
+            }
         }
       }
 
@@ -207,7 +233,7 @@ export default function InspectionReport() {
                 <div className = "w-[80%]">
                     <div className = "flex flex-row ml-[3.5rem] mt-16">
                         <h1 className ='text-3xl text-white font-bold'>
-                            Tesla Model 3 2021
+                            {from.make} {from.model}
                         </h1>
                     </div>
                     <div className="flex flex-row items-center justify-center pt-10">

@@ -62,6 +62,7 @@ export default function Login() {
             })
             .catch((error)=>{
                 navigate("/");
+                console.log(error)
             })
              
         } catch (error) {

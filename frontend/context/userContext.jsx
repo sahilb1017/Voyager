@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import Axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
-const AppContext = createContext();
+const AppContext = createContext({});
 
 export function AppWrapper({ children }) {
   const [user, setUser] = useState({});

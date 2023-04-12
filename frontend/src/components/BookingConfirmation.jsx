@@ -21,8 +21,8 @@ export default function BookingConfirmation({form,information,pick,drop,open}) {
       
         const date1 = new Date(form.start)
         const date2 = new Date(form.end)
-        SetPrice((Math.ceil(Math.abs(date2 - date1)/ (1000 * 60 * 60 * 24))*information.price+insurance.price)-couponVal)
-        setCoupon("")
+        const dayPrice = insurance.price.replace(/\D/g,'');
+        SetPrice((Math.ceil(Math.abs(date2 - date1)/ (1000 * 60 * 60 * 24))*(parseInt(dayPrice))+insurance.price)-couponVal)
         
       },[open,insurance]);
 
@@ -39,7 +39,7 @@ export default function BookingConfirmation({form,information,pick,drop,open}) {
 
     const handleInputChange = (event) => {
         const { value } = event.target;
-        setCoupon(v);
+        setCoupon(value);
       };
 
 

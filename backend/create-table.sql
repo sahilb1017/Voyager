@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS INSPECTION_REPORT (
     Inspector_Email TEXT,
     Vehicle_Reg TEXT,
     Decision INTEGER,
+    UNIQUE(Report_ID, Inspector_Email)
     FOREIGN KEY(Inspector_Email) REFERENCES INSPECTOR(Email),
     FOREIGN KEY(Vehicle_Reg) REFERENCES VEHICLE(Reg_Num)
 );
@@ -103,8 +104,12 @@ CREATE TABLE IF NOT EXISTS BOOKING (
     End_Date  TEXT ,
     PickUp_Location INTEGER ,
     DropOff_Location INTEGER , 
+    Insurance_ID INTEGER,
+    Coupon_ID INTEGER,
     FOREIGN KEY(PickUp_Location) REFERENCES LOCATION(Location_ID),
     FOREIGN KEY(DropOff_Location) REFERENCES LOCATION(Location_ID)
+    FOREIGN KEY(Insurance_ID) REFERENCES INSURANCE(Insurance_ID),
+    FOREIGN KEY(Coupon_ID) REFERENCES COUPON(Coupon_ID)
 );
 
 CREATE TABLE IF NOT EXISTS BILL (
@@ -113,11 +118,7 @@ CREATE TABLE IF NOT EXISTS BILL (
     Cost INTEGER ,
     Bill_Date  TEXT ,
     Discount_Applied INTEGER ,
-    Insurance_ID INTEGER,
-    Coupon_ID INTEGER,
     UNIQUE (Bill_ID, Booking_ID),
-    FOREIGN KEY(Insurance_ID) REFERENCES INSURANCE(Insurance_ID),
-    FOREIGN KEY(Coupon_ID) REFERENCES COUPON(Coupon_ID),
     FOREIGN KEY(Booking_ID) REFERENCES BOOKING(Booking_ID)
 ) ;
 

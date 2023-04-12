@@ -5,19 +5,37 @@ import Inspector_Logo from "/Inspector_logo.png"
 import { Link } from "react-router-dom"
 import {motion} from 'framer-motion'
 import LogoNav from '../components/LogoNav'
+import { useNavigate } from "react-router-dom";
+
 
 
 
 
 export default function SelectUser() {
     const[usertype,setUserType] = useState("");
+    const navigate = useNavigate();
+
     
-    function handler(type){
-      setUserType(type)
+    function handler1(){ 
+        navigate("/RegisterUser",{
+            state: {
+                type: "User"
+            }
+        });  
+    }
+
+    function handler2(){
+        navigate("/RegisterCompany")
     }
     
-
-
+    function handler3(){
+        navigate("/RegisterUser",{
+            state: {
+                type: "Inspector"
+            }
+        });
+    }
+      
     return (
         <div className = "w-full h-full ">
                   <LogoNav/>
@@ -29,21 +47,21 @@ export default function SelectUser() {
                     <motion.div
                     whileHover={{scale:1.2}}>
                         <div className='flex flex-col justify-center items-center'>
-                            <button className="w-48 h-48" ><img src={User_Logo}onClick={handler('U')} /></button>
+                            <button className="w-48 h-48" ><img src={User_Logo} onClick={handler1} /></button>
                             <h2 className = "text-white text-xl">User</h2>
                         </div>
                     </motion.div>
                     <motion.div
                     whileHover={{scale:1.2}}>
                         <div className='flex flex-col justify-center items-center'>
-                            <button className="w-48 h-48" ><img src={Company_Logo} onClick={handler('C')} /></button>
+                            <button className="w-48 h-48" ><img src={Company_Logo} onClick={handler2} /></button>
                             <h2 className = "text-white text-xl">Company</h2>
                         </div>
                     </motion.div>
                     <motion.div
                     whileHover={{scale:1.2}}>
                         <div className='flex flex-col justify-center items-center'>
-                            <button className="w-48 h-48" ><img src={Inspector_Logo} onClick={handler('I')} /></button>
+                            <button className="w-48 h-48" ><img src={Inspector_Logo} onClick={handler3} /></button>
                             <h2 className = "text-white text-xl">Inspector</h2>
                         </div>
                     </motion.div>

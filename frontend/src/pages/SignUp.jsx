@@ -8,11 +8,14 @@ import { Link } from "react-router-dom"
 import { useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { useNavigate } from "react-router-dom";
+import { useAppContext } from '../../context/userContext'
+import Axios from "axios";
 
 export default function SignUp() {
-
+  const navigate = useNavigate();
   const[form,setForm] = useState({email:"",password:"",verify:""})
+  const {user, setUser} = useAppContext();
 
   function handler(event){
     setForm(prevForm =>{
@@ -55,9 +58,7 @@ export default function SignUp() {
         });
     };
 
-
-
-    function SignUpHandler(){
+    async function SignUpHandler(){
         if((form.email==='')||(form.password==='')||(form.verify===''))
         return emptyFieldToast()
     
@@ -65,11 +66,26 @@ export default function SignUp() {
             return invalidEmailToast()
         }
 
-        else if(form.password!=form1.verify){
+        else if(form.password!=form.verify){
             return diffPasswordToast()
         }
         else{
+            try{
+                const url = "http://localhost:8000/account/create";
+                await Axios.post(url, {email: form.email, password: form.password})
+                .then((response)=>{
+                    setUser(response);
+                    navigate("/SelectUser");
 
+                })
+                .catch((error)=>{
+                    return emailInUseToast(); 
+                })
+            }
+            catch(error){
+                console.log(error)
+                
+            }    
         }
     }
 
@@ -102,15 +118,15 @@ export default function SignUp() {
             <div class="inline-flex items-center justify-center w-full gap-x-10 ">
             <motion.div
             whileHover={{scale:1.2}}>
-                <button class="w-10 h-10" ><img src={Google_Logo} alt="my image" onClick={console.log('harshal')} /></button>
+                <button class="w-10 h-10" ><img src={Google_Logo} alt="my image"/></button>
             </motion.div>
             <motion.div
             whileHover={{scale:1.2}}>
-                <button class="w-10 h-10"><img src={Facebook_Logo} alt="my image" onClick={console.log('harshal')} /></button>
+                <button class="w-10 h-10"><img src={Facebook_Logo} alt="my image" /></button>
             </motion.div>
             <motion.div
             whileHover={{scale:1.2}}>
-            <button class="w-10 h-10"><img src={Linkdein_Logo} alt="my image" onClick={console.log('harshal')} /></button>
+            <button class="w-10 h-10"><img src={Linkdein_Logo} alt="my image"/></button>
             </motion.div>
             </div>
             <p class="text-white flex">

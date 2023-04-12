@@ -2,7 +2,6 @@ import React from 'react'
 import test from "../assets/test.jpg"
 
 function CarCard(props) {
-    console.log("hello")
     return (
       <div className=" rounded-lg shadow bg-card-grey border-card-grey overflow-hidden w-[275px] h-[380px] pb-6">
         <div className="h-3/5">

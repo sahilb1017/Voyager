@@ -3,8 +3,23 @@ import fastapi.security as _security
 import sqlalchemy.orm as _orm
 import services as _services
 import schemas as _schemas
+from fastapi.middleware.cors import CORSMiddleware
+
 
 app = _fastapi.FastAPI()
+
+origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.post("/account/create")
 async def create_account(account: _schemas.AccountCreate, db: _orm.Session = _fastapi.Depends(_services.get_db)):

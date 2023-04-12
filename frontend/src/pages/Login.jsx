@@ -8,12 +8,15 @@ import { Link } from "react-router-dom"
 import { useAppContext } from '../../context/userContext'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import {useState} from "react";
+import { useNavigate } from "react-router-dom";
+import Axios from "axios";
 
 
 export default function Login() {
-
+    const navigate = useNavigate();
     const[form,setForm] = useState({email:"", password:""})
+    const {logIn, setUser, user} = useAppContext();
 
     function handler(event){
         setForm(Form =>{
@@ -37,9 +40,32 @@ export default function Login() {
 
 
 
-    function LoginHandler(){
+    async function LoginHandler(){
         if(!form.email||!form.email){
             emptyFieldToast()
+        }
+        try {
+            const url = "http://localhost:8000/account/login";
+            await Axios.post(url, form)
+            .then((response)=>{
+                setUser(response);
+                const userType = response.data.acc_type;
+                if(userType == "User"){
+                    navigate("/Browse");
+                }
+                if(userType == "Company"){
+                    navigate("/Browse");
+                }
+                if(userType == "Inspector"){
+                    navigate("/Inspect");
+                } 
+            })
+            .catch((error)=>{
+                navigate("/");
+            })
+             
+        } catch (error) {
+            console.log(error)
         }
     }
   return (
@@ -69,15 +95,15 @@ export default function Login() {
                 <div class="inline-flex items-center justify-center w-full gap-x-10 ">
                 <motion.div
                 whileHover={{scale:1.2}}>
-                    <button class="w-10 h-10" ><img src={Google_Logo} alt="my image" onClick={console.log('harshal')} /></button>
+                    <button class="w-10 h-10" ><img src={Google_Logo} alt="my image"  /></button>
                 </motion.div>
                 <motion.div
                 whileHover={{scale:1.2}}>
-                    <button class="w-10 h-10"><img src={Facebook_Logo} alt="my image" onClick={console.log('harshal')} /></button>
+                    <button class="w-10 h-10"><img src={Facebook_Logo} alt="my image"  /></button>
                 </motion.div>
                 <motion.div
                 whileHover={{scale:1.2}}>
-                <button class="w-10 h-10"><img src={Linkdein_Logo} alt="my image" onClick={console.log('harshal')} /></button>
+                <button class="w-10 h-10"><img src={Linkdein_Logo} alt="my image" /></button>
                 </motion.div>
                 </div>
                 <p class="text-white flex">

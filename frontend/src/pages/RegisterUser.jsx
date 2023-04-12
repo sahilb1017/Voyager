@@ -9,11 +9,19 @@ import { PatternFormat } from 'react-number-format';
 import { useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAppContext } from '../../context/userContext'
+import Axios from "axios";
 
 export default function RegisterUser() {
 
+    const navigate = useNavigate();
+    const location = useLocation();
     const[form,setForm] = useState({first:"",last:"",phone:"",birthdate:"",street:"",postal:"",city:"",province:""})
+    let type = location.state.type;
+
+    const {logIn, setUser, user} = useAppContext();
 
     function handler(event){
       setForm(prevForm =>{
@@ -35,10 +43,50 @@ export default function RegisterUser() {
 };
 
 function RegisterUserHandler(){
+  console.log(form)
   if(!form.first||!form.last||!form.phone||!form.birthdate||!form.street||!form.postal||!form.city||!form.province)
     return emptyFieldToast()
   else{
-
+    try {
+      const url = "http://localhost:8000/account/update";
+      Axios.put(url, 
+        {
+          email: user.data.email,
+          ph_Num: form.phone,
+          city: form.city,
+          postal_Code: form.postal,
+          street: form.street,
+          province: form.province,
+          acc_type: type
+        }
+      )
+      .then((response)=>{
+          setUser(response);
+          const url2 = "http://localhost:8000/account/create/" + type;
+          Axios.post(url2.toLowerCase(), 
+            {
+              email: user.data.email,
+              first_name: form.first,
+              last_name: form.last,
+              dob: form.birthdate
+            }
+          ).then((response) =>{
+            if(type == "User"){
+              navigate("/Browse")
+            }
+            else if(type == "Inspector"){
+              navigate("/Inspect")
+            }
+          }).catch((error)=>{
+            console.log(error);
+        })
+      })
+      .catch((error)=>{
+          console.log(error);
+      }) 
+    } catch (error) {
+      console.log(error)
+    }
     }
 }
 
@@ -182,8 +230,8 @@ function RegisterUserHandler(){
                         <input type="text" name="province" placeholder="Province" onChange={handler} className="px-4 h-10 w-80 bg-main-grey text-white rounded-3xl outline-white outline-2 focus:outline focus:outline-white hover:outline hover:outline-[#464646]"/>
                     </div>
                     <div className='flex flex-col justify-start items-center gap-y-5 pt-20'>
-                        <input type="text" name="first" placeholder="First Name" className="px-4 h-10 w-80 bg-main-grey text-white rounded-3xl outline-white outline-2 focus:outline focus:outline-white hover:outline hover:outline-[#464646]"/>
-                        <input type="text" name="last" placeholder="Last Name" className="px-4 h-10 w-80 bg-main-grey text-white rounded-3xl outline-white outline-2 focus:outline focus:outline-white hover:outline hover:outline-[#464646]"/>
+                        <input type="text" name="first" placeholder="First Name" onChange={handler} className="px-4 h-10 w-80 bg-main-grey text-white rounded-3xl outline-white outline-2 focus:outline focus:outline-white hover:outline hover:outline-[#464646]"/>
+                        <input type="text" name="last" placeholder="Last Name" onChange={handler} className="px-4 h-10 w-80 bg-main-grey text-white rounded-3xl outline-white outline-2 focus:outline focus:outline-white hover:outline hover:outline-[#464646]"/>
                         <PatternFormat
                             className="px-4 h-10 w-80 bg-main-grey text-white rounded-3xl outline-white outline-2 focus:outline focus:outline-white hover:outline hover:outline-[#464646]"
                             type="tel"
@@ -209,9 +257,9 @@ function RegisterUserHandler(){
                                         selected = {true}
                                         format="MMMM D, YYYY"
                                         onChange={(newValue)=>{
-                                            setform2(prevform2 =>({
+                                            setForm(prevform2 =>({
                                             ...prevform2,
-                                            birthday : moment(new Date(newValue)).format('YYYY-MM-DD')
+                                            birthdate : moment(new Date(newValue)).format('YYYY-MM-DD')
 
                                     }))}}/>
                                     </LocalizationProvider>

@@ -5,31 +5,37 @@ import Inspector_Logo from "/Inspector_logo.png"
 import { Link } from "react-router-dom"
 import {motion} from 'framer-motion'
 import LogoNav from '../components/LogoNav'
+import { useNavigate } from "react-router-dom";
+
 
 
 
 
 export default function SelectUser() {
     const[usertype,setUserType] = useState("");
+    const navigate = useNavigate();
+
     
-    function handler1(){
-      setUserType("U")
+    function handler1(){ 
+        navigate("/RegisterUser",{
+            state: {
+                type: "User"
+            }
+        });  
     }
 
     function handler2(){
-        setUserType("I")
-      }
+        navigate("/RegisterCompany")
+    }
     
-      function handler3(){
-        setUserType("C")
-      }
+    function handler3(){
+        navigate("/RegisterUser",{
+            state: {
+                type: "Inspector"
+            }
+        });
+    }
       
-    
-      
-      
-    
-
-
     return (
         <div className = "w-full h-full ">
                   <LogoNav/>

@@ -96,7 +96,7 @@ async def create_company(company: _schemas.Company, db: _orm.Session):
 async def create_inspector(inspector: _schemas.Inspector, db: _orm.Session):
     db.execute(_sql.sql.text(f'INSERT INTO INSPECTOR VALUES ("{inspector.email}", "{inspector.first_name}", "{inspector.last_name}", "{inspector.dob}")'))
     db.commit()
-    found_inspector =  db.execute(_sql.sql.text(f'SELECT * FROM USER WHERE Email = "{inspector.email}"'))
+    found_inspector =  db.execute(_sql.sql.text(f'SELECT * FROM INSPECTOR WHERE Email = "{inspector.email}"'))
     found_inspector = found_inspector.first()   
 
     return _schemas.Inspector(
@@ -147,7 +147,7 @@ class Vehicles:
             x = _schemas.Car(
                 reg_num=c.REG_NUM, license=c.License, num_passengers=c.Num_Of_Passengers, mileage=c.Mileage, model=c.Model, make=c.Make, color=c.Color,
                 price=c.Price, availability=c.Availability, reviewed=c.Reviewed, mechanic_id=c.Mechanic_ID, cleaner_id=c.Cleaner_ID, owner_id=c.Owner_ID, 
-                date_posted=c.Date_Posted, type=c.Type
+                date_posted=c.Date_Posted, type=c.Type, vehicle_type="Car"
             )
             cars_to_send.append(x)
         
@@ -166,7 +166,7 @@ class Vehicles:
             x = _schemas.Truck(
                 reg_num=t.REG_NUM, license=t.License, num_passengers=t.Num_Of_Passengers, mileage=t.Mileage, model=t.Model, make=t.Make, color=t.Color,
                 price=t.Price, availability=t.Availability, reviewed=t.Reviewed, mechanic_id=t.Mechanic_ID, cleaner_id=t.Cleaner_ID, owner_id=t.Owner_ID, 
-                date_posted=t.Date_Posted, tonnage=t.Tonnage
+                date_posted=t.Date_Posted, tonnage=t.Tonnage, vehicle_type="Truck"
             )
             trucks_to_send.append(x)
         
@@ -185,7 +185,7 @@ class Vehicles:
             x = _schemas.Boat(
                 reg_num=b.REG_NUM, license=b.License, num_passengers=b.Num_Of_Passengers, mileage=b.Mileage, model=b.Model, make=b.Make, color=b.Color,
                 price=b.Price, availability=b.Availability, reviewed=b.Reviewed, mechanic_id=b.Mechanic_ID, cleaner_id=b.Cleaner_ID, owner_id=b.Owner_ID, 
-                date_posted=b.Date_Posted, knots=b.Knots
+                date_posted=b.Date_Posted, knots=b.Knots, vehicle_type="Boat"
             )
             boats_to_send.append(x)
         
@@ -204,7 +204,7 @@ class Vehicles:
             x = _schemas.Motorcycle(
                 reg_num=m.REG_NUM, license=m.License, num_passengers=m.Num_Of_Passengers, mileage=m.Mileage, model=m.Model, make=m.Make, color=m.Color,
                 price=m.Price, availability=m.Availability, reviewed=m.Reviewed, mechanic_id=m.Mechanic_ID, cleaner_id=m.Cleaner_ID, owner_id=m.Owner_ID, 
-                date_posted=m.Date_Posted, cc=m.CC
+                date_posted=m.Date_Posted, cc=m.CC, vehicle_type="Motorcycle"
             )
             motorcycles_to_send.append(x)
         
@@ -223,7 +223,7 @@ class Vehicles:
             x = _schemas.Jet(
                 reg_num=j.REG_NUM, license=j.License, num_passengers=j.Num_Of_Passengers, mileage=j.Mileage, model=j.Model, make=j.Make, color=j.Color,
                 price=j.Price, availability=j.Availability, reviewed=j.Reviewed, mechanic_id=j.Mechanic_ID, cleaner_id=j.Cleaner_ID, owner_id=j.Owner_ID, 
-                date_posted=j.Date_Posted, tbo=j.TBO
+                date_posted=j.Date_Posted, tbo=j.TBO, vehicle_type="Jet"
             )
             jets_to_send.append(x)
         
@@ -246,7 +246,7 @@ class Inspection:
             x = _schemas.Car(
                 reg_num=c.REG_NUM, license=c.License, num_passengers=c.Num_Of_Passengers, mileage=c.Mileage, model=c.Model, make=c.Make, color=c.Color,
                 price=c.Price, availability=c.Availability, reviewed=c.Reviewed, mechanic_id=c.Mechanic_ID, cleaner_id=c.Cleaner_ID, owner_id=c.Owner_ID, 
-                date_posted=c.Date_Posted, type=c.Type
+                date_posted=c.Date_Posted, type=c.Type, vehicle_type="Car"
             )
             cars_to_send.append(x)
         
@@ -265,7 +265,7 @@ class Inspection:
             x = _schemas.Truck(
                 reg_num=t.REG_NUM, license=t.License, num_passengers=t.Num_Of_Passengers, mileage=t.Mileage, model=t.Model, make=t.Make, color=t.Color,
                 price=t.Price, availability=t.Availability, reviewed=t.Reviewed, mechanic_id=t.Mechanic_ID, cleaner_id=t.Cleaner_ID, owner_id=t.Owner_ID, 
-                date_posted=t.Date_Posted, tonnage=t.Tonnage
+                date_posted=t.Date_Posted, tonnage=t.Tonnage, vehicle_type="Truck"
             )
             trucks_to_send.append(x)
         
@@ -284,7 +284,7 @@ class Inspection:
             x = _schemas.Boat(
                 reg_num=b.REG_NUM, license=b.License, num_passengers=b.Num_Of_Passengers, mileage=b.Mileage, model=b.Model, make=b.Make, color=b.Color,
                 price=b.Price, availability=b.Availability, reviewed=b.Reviewed, mechanic_id=b.Mechanic_ID, cleaner_id=b.Cleaner_ID, owner_id=b.Owner_ID, 
-                date_posted=b.Date_Posted, knots=b.Knots
+                date_posted=b.Date_Posted, knots=b.Knots,vehicle_type="Boat"
             )
             boats_to_send.append(x)
         
@@ -303,7 +303,7 @@ class Inspection:
             x = _schemas.Motorcycle(
                 reg_num=m.REG_NUM, license=m.License, num_passengers=m.Num_Of_Passengers, mileage=m.Mileage, model=m.Model, make=m.Make, color=m.Color,
                 price=m.Price, availability=m.Availability, reviewed=m.Reviewed, mechanic_id=m.Mechanic_ID, cleaner_id=m.Cleaner_ID, owner_id=m.Owner_ID, 
-                date_posted=m.Date_Posted, cc=m.CC
+                date_posted=m.Date_Posted, cc=m.CC, vehicle_type="Motorcycle"
             )
             motorcycles_to_send.append(x)
         
@@ -322,7 +322,7 @@ class Inspection:
             x = _schemas.Jet(
                 reg_num=j.REG_NUM, license=j.License, num_passengers=j.Num_Of_Passengers, mileage=j.Mileage, model=j.Model, make=j.Make, color=j.Color,
                 price=j.Price, availability=j.Availability, reviewed=j.Reviewed, mechanic_id=j.Mechanic_ID, cleaner_id=j.Cleaner_ID, owner_id=j.Owner_ID, 
-                date_posted=j.Date_Posted, tbo=j.TBO
+                date_posted=j.Date_Posted, tbo=j.TBO, vehicle_type="Jet"
             )
             jets_to_send.append(x)
         
@@ -347,25 +347,131 @@ class Inspection:
         return report;
 
     async def get_pending(user: _schemas.RetrieveInfo, db:  _orm.Session):
-        to_send = []
-        pending = db.execute(_sql.sql.text(f'SELECT * FROM VEHICLE WHERE Reviewed = 0 AND Owner_ID = "{user.email}"'))
+        to_send = list()
 
-        for p in pending:
-            x = _schemas.Pending(
-                num_passengers=p.Num_Of_Passengers, mileage=p.Mileage, model=p.Model, make=p.Make, color=p.Color, price=p.Price, 
-                date_posted=p.Date_Posted, type=p.Type
+        cars = db.execute(_sql.sql.text(f''' SELECT v.REG_NUM, v.License, v.Num_Of_Passengers, v.Mileage, v.Model, v.Make,
+                                        v.Color, v.Price, v.Availability, v.Reviewed, v.Mechanic_ID, v.Cleaner_ID, v.Owner_ID,
+                                        v.Date_Posted, c.Type FROM VEHICLE AS v JOIN CAR AS C ON v.REG_NUM = c.REG_NUM        
+                                        WHERE v.Reviewed = 0 AND v.Owner_ID = "{user.email}"'''))
+        
+        for c in cars:
+            x = _schemas.Car(
+                reg_num=c.REG_NUM, license=c.License, num_passengers=c.Num_Of_Passengers, mileage=c.Mileage, model=c.Model, make=c.Make, color=c.Color,
+                price=c.Price, availability=c.Availability, reviewed=c.Reviewed, mechanic_id=c.Mechanic_ID, cleaner_id=c.Cleaner_ID, owner_id=c.Owner_ID, 
+                date_posted=c.Date_Posted, type=c.Type, vehicle_type="Car"
+            )
+            to_send.append(x)
+
+        trucks = db.execute(_sql.sql.text(f''' SELECT v.REG_NUM, v.License, v.Num_Of_Passengers, v.Mileage, v.Model, v.Make,
+                                        v.Color, v.Price, v.Availability, v.Reviewed, v.Mechanic_ID, v.Cleaner_ID, v.Owner_ID,
+                                        v.Date_Posted, t.Tonnage FROM VEHICLE AS v JOIN TRUCK AS t ON v.REG_NUM = t.REG_NUM
+                                        WHERE v.Reviewed = 0 AND v.Owner_ID = "{user.email}"'''))
+        for t in trucks:
+            x = _schemas.Truck(
+                reg_num=t.REG_NUM, license=t.License, num_passengers=t.Num_Of_Passengers, mileage=t.Mileage, model=t.Model, make=t.Make, color=t.Color,
+                price=t.Price, availability=t.Availability, reviewed=t.Reviewed, mechanic_id=t.Mechanic_ID, cleaner_id=t.Cleaner_ID, owner_id=t.Owner_ID, 
+                date_posted=t.Date_Posted, tonnage=t.Tonnage, vehicle_type="Truck"
+            )
+            to_send.append(x)
+
+        boats = db.execute(_sql.sql.text(f''' SELECT v.REG_NUM, v.License, v.Num_Of_Passengers, v.Mileage, v.Model, v.Make,
+                                        v.Color, v.Price, v.Availability, v.Reviewed, v.Mechanic_ID, v.Cleaner_ID, v.Owner_ID,
+                                        v.Date_Posted, b.Knots FROM VEHICLE AS v JOIN BOAT AS b ON v.REG_NUM = b.REG_NUM
+                                        WHERE v.Reviewed = 0 AND v.Owner_ID = "{user.email}"'''))
+        for b in boats:
+            x = _schemas.Boat(
+                reg_num=b.REG_NUM, license=b.License, num_passengers=b.Num_Of_Passengers, mileage=b.Mileage, model=b.Model, make=b.Make, color=b.Color,
+                price=b.Price, availability=b.Availability, reviewed=b.Reviewed, mechanic_id=b.Mechanic_ID, cleaner_id=b.Cleaner_ID, owner_id=b.Owner_ID, 
+                date_posted=b.Date_Posted, knots=b.Knots, vehicle_type="Boat"
+            )
+            to_send.append(x)
+
+        motorcycles = db.execute(_sql.sql.text(f''' SELECT v.REG_NUM, v.License, v.Num_Of_Passengers, v.Mileage, v.Model, v.Make,
+                                        v.Color, v.Price, v.Availability, v.Reviewed, v.Mechanic_ID, v.Cleaner_ID, v.Owner_ID,
+                                        v.Date_Posted, m.CC FROM VEHICLE AS v JOIN MOTORCYCLE AS m ON v.REG_NUM = m.REG_NUM
+                                        WHERE v.Reviewed = 0 AND v.Owner_ID = "{user.email}"'''))
+        for m in motorcycles:
+            x = _schemas.Motorcycle(
+                reg_num=m.REG_NUM, license=m.License, num_passengers=m.Num_Of_Passengers, mileage=m.Mileage, model=m.Model, make=m.Make, color=m.Color,
+                price=m.Price, availability=m.Availability, reviewed=m.Reviewed, mechanic_id=m.Mechanic_ID, cleaner_id=m.Cleaner_ID, owner_id=m.Owner_ID, 
+                date_posted=m.Date_Posted, cc=m.CC, vehicle_type="Motorcycle"
+            )
+            to_send.append(x)
+
+        jets = db.execute(_sql.sql.text(f''' SELECT v.REG_NUM, v.License, v.Num_Of_Passengers, v.Mileage, v.Model, v.Make,
+                                        v.Color, v.Price, v.Availability, v.Reviewed, v.Mechanic_ID, v.Cleaner_ID, v.Owner_ID,
+                                        v.Date_Posted, j.TBO FROM VEHICLE AS v JOIN JET AS j ON v.REG_NUM = j.REG_NUM
+                                        WHERE v.Reviewed = 0 AND v.Owner_ID = "{user.email}"'''))
+        for j in jets:
+            x = _schemas.Jet(
+                reg_num=j.REG_NUM, license=j.License, num_passengers=j.Num_Of_Passengers, mileage=j.Mileage, model=j.Model, make=j.Make, color=j.Color,
+                price=j.Price, availability=j.Availability, reviewed=j.Reviewed, mechanic_id=j.Mechanic_ID, cleaner_id=j.Cleaner_ID, owner_id=j.Owner_ID, 
+                date_posted=j.Date_Posted, tbo=j.TBO, vehicle_type="Jet"
             )
             to_send.append(x)
         return to_send
     
     async def get_approved(user: _schemas.RetrieveInfo, db:  _orm.Session):
         to_send = []
-        approved = db.execute(_sql.sql.text(f'SELECT * FROM VEHICLE WHERE Reviewed = 1 AND Availability = 1 AND Owner_ID = "{user.email}"'))
 
-        for p in approved:
-            x = _schemas.Pending(
-                num_passengers=p.Num_Of_Passengers, mileage=p.Mileage, model=p.Model, make=p.Make, color=p.Color, price=p.Price, 
-                date_posted=p.Date_Posted, type=p.Type
+        cars = db.execute(_sql.sql.text(f''' SELECT v.REG_NUM, v.License, v.Num_Of_Passengers, v.Mileage, v.Model, v.Make,
+                                        v.Color, v.Price, v.Availability, v.Reviewed, v.Mechanic_ID, v.Cleaner_ID, v.Owner_ID,
+                                        v.Date_Posted, c.Type FROM VEHICLE AS v JOIN CAR AS C ON v.REG_NUM = c.REG_NUM        
+                                        WHERE v.Reviewed = 1 AND v.Availability = 1 AND v.Owner_ID = "{user.email}"'''))
+        
+        for c in cars:
+            x = _schemas.Car(
+                reg_num=c.REG_NUM, license=c.License, num_passengers=c.Num_Of_Passengers, mileage=c.Mileage, model=c.Model, make=c.Make, color=c.Color,
+                price=c.Price, availability=c.Availability, reviewed=c.Reviewed, mechanic_id=c.Mechanic_ID, cleaner_id=c.Cleaner_ID, owner_id=c.Owner_ID, 
+                date_posted=c.Date_Posted, type=c.Type, vehicle_type="Car"
+            )
+            to_send.append(x)
+
+        trucks = db.execute(_sql.sql.text(f''' SELECT v.REG_NUM, v.License, v.Num_Of_Passengers, v.Mileage, v.Model, v.Make,
+                                        v.Color, v.Price, v.Availability, v.Reviewed, v.Mechanic_ID, v.Cleaner_ID, v.Owner_ID,
+                                        v.Date_Posted, t.Tonnage FROM VEHICLE AS v JOIN TRUCK AS t ON v.REG_NUM = t.REG_NUM
+                                        WHERE v.Reviewed = 1 AND v.Availability = 1 AND v.Owner_ID = "{user.email}"'''))
+        for t in trucks:
+            x = _schemas.Truck(
+                reg_num=t.REG_NUM, license=t.License, num_passengers=t.Num_Of_Passengers, mileage=t.Mileage, model=t.Model, make=t.Make, color=t.Color,
+                price=t.Price, availability=t.Availability, reviewed=t.Reviewed, mechanic_id=t.Mechanic_ID, cleaner_id=t.Cleaner_ID, owner_id=t.Owner_ID, 
+                date_posted=t.Date_Posted, tonnage=t.Tonnage, vehicle_type="Truck"
+            )
+            to_send.append(x)
+
+        boats = db.execute(_sql.sql.text(f''' SELECT v.REG_NUM, v.License, v.Num_Of_Passengers, v.Mileage, v.Model, v.Make,
+                                        v.Color, v.Price, v.Availability, v.Reviewed, v.Mechanic_ID, v.Cleaner_ID, v.Owner_ID,
+                                        v.Date_Posted, b.Knots FROM VEHICLE AS v JOIN BOAT AS b ON v.REG_NUM = b.REG_NUM
+                                        WHERE v.Reviewed = 1 AND v.Availability = 1 AND v.Owner_ID = "{user.email}"'''))
+        for b in boats:
+            x = _schemas.Boat(
+                reg_num=b.REG_NUM, license=b.License, num_passengers=b.Num_Of_Passengers, mileage=b.Mileage, model=b.Model, make=b.Make, color=b.Color,
+                price=b.Price, availability=b.Availability, reviewed=b.Reviewed, mechanic_id=b.Mechanic_ID, cleaner_id=b.Cleaner_ID, owner_id=b.Owner_ID, 
+                date_posted=b.Date_Posted, knots=b.Knots, vehicle_type="Boat"
+            )
+            to_send.append(x)
+
+        motorcycles = db.execute(_sql.sql.text(f''' SELECT v.REG_NUM, v.License, v.Num_Of_Passengers, v.Mileage, v.Model, v.Make,
+                                        v.Color, v.Price, v.Availability, v.Reviewed, v.Mechanic_ID, v.Cleaner_ID, v.Owner_ID,
+                                        v.Date_Posted, m.CC FROM VEHICLE AS v JOIN MOTORCYCLE AS m ON v.REG_NUM = m.REG_NUM
+                                        WHERE v.Reviewed = 1 AND v.Availability = 1 AND v.Owner_ID = "{user.email}"'''))
+        for m in motorcycles:
+            x = _schemas.Motorcycle(
+                reg_num=m.REG_NUM, license=m.License, num_passengers=m.Num_Of_Passengers, mileage=m.Mileage, model=m.Model, make=m.Make, color=m.Color,
+                price=m.Price, availability=m.Availability, reviewed=m.Reviewed, mechanic_id=m.Mechanic_ID, cleaner_id=m.Cleaner_ID, owner_id=m.Owner_ID, 
+                date_posted=m.Date_Posted, cc=m.CC, vehicle_type="Motorcycle"
+            )
+            to_send.append(x)
+
+        jets = db.execute(_sql.sql.text(f''' SELECT v.REG_NUM, v.License, v.Num_Of_Passengers, v.Mileage, v.Model, v.Make,
+                                        v.Color, v.Price, v.Availability, v.Reviewed, v.Mechanic_ID, v.Cleaner_ID, v.Owner_ID,
+                                        v.Date_Posted, j.TBO FROM VEHICLE AS v JOIN JET AS j ON v.REG_NUM = j.REG_NUM
+                                        WHERE v.Reviewed = 1 AND v.Availability = 1 AND v.Owner_ID = "{user.email}"'''))
+        for j in jets:
+            x = _schemas.Jet(
+                reg_num=j.REG_NUM, license=j.License, num_passengers=j.Num_Of_Passengers, mileage=j.Mileage, model=j.Model, make=j.Make, color=j.Color,
+                price=j.Price, availability=j.Availability, reviewed=j.Reviewed, mechanic_id=j.Mechanic_ID, cleaner_id=j.Cleaner_ID, owner_id=j.Owner_ID, 
+                date_posted=j.Date_Posted, tbo=j.TBO, vehicle_type="Jet"
             )
             to_send.append(x)
         return to_send
@@ -457,20 +563,91 @@ class Booking:
     async def get_booked_vehicles(user: _schemas.RetrieveInfo, db: _orm.Session):
         to_send = list()
 
-        booked = db.execute(_sql.sql.text(f'''SELECT * FROM (BOOKS AS B JOIN BOOKING AS q ON b.Booking_ID = q.Booking_ID) 
-                                          JOIN VEHICLE as v on b.Vehicle_ID = v.REG_NUM WHERE b.Email_ID = "{user.email}"'''))
+        cars = db.execute(_sql.sql.text(f'''SELECT * FROM ((BOOKS AS B JOIN BOOKING AS q ON b.Booking_ID = q.Booking_ID) 
+                                          JOIN VEHICLE as v on b.Vehicle_ID = v.REG_NUM) JOIN CAR AS c ON v.REG_NUM =  c.REG_NUM
+                                          WHERE b.Email_ID = "{user.email}"'''))
         
-        for b in booked:
+        for b in cars:
             streets = []
             locations = db.execute(_sql.sql.text(f'SELECT Street FROM LOCATION WHERE Location_ID = {b.PickUp_Location} OR Location_ID = {b.DropOff_Location}'))
             for l in locations:
-                streets.append(l.Street)
-            
-            x = _schemas.BookedVehicle(
-                num_passengers=b.Num_Of_Passengers, mileage=b.Mileage, model=b.Model, make=b.Make, color=b.Color, price=b.Price, 
-                date_posted=b.Date_Posted, start_date=b.Start_Date, end_date=b.End_Date, pickup=streets[0], dropoff=streets[1], type=b.Type
-            )
+                streets.append(l.Street)   
 
+            x = _schemas.BookedCar(
+                num_passengers=b.Num_Of_Passengers, mileage=b.Mileage, model=b.Model, make=b.Make, color=b.Color, price=b.Price, 
+                date_posted=b.Date_Posted, start_date=b.Start_Date, end_date=b.End_Date, pickup=streets[0], dropoff=streets[1], vehicle_type="Car", type=b.Type
+            )
             to_send.append(x)
+
+
+        trucks = db.execute(_sql.sql.text(f'''SELECT * FROM ((BOOKS AS B JOIN BOOKING AS q ON b.Booking_ID = q.Booking_ID) 
+                                          JOIN VEHICLE as v on b.Vehicle_ID = v.REG_NUM) JOIN TRUCK AS c ON v.REG_NUM =  c.REG_NUM
+                                          WHERE b.Email_ID = "{user.email}"'''))
+        
+        for b in trucks:
+            streets = []
+            locations = db.execute(_sql.sql.text(f'SELECT Street FROM LOCATION WHERE Location_ID = {b.PickUp_Location} OR Location_ID = {b.DropOff_Location}'))
+            for l in locations:
+                streets.append(l.Street)   
+
+            x = _schemas.BookedTruck(
+                num_passengers=b.Num_Of_Passengers, mileage=b.Mileage, model=b.Model, make=b.Make, color=b.Color, price=b.Price, 
+                date_posted=b.Date_Posted, start_date=b.Start_Date, end_date=b.End_Date, pickup=streets[0], dropoff=streets[1], vehicle_type="Truck", type=b.Tonnage
+            )
+            to_send.append(x)
+
+        
+        boats = db.execute(_sql.sql.text(f'''SELECT * FROM ((BOOKS AS B JOIN BOOKING AS q ON b.Booking_ID = q.Booking_ID) 
+                                          JOIN VEHICLE as v on b.Vehicle_ID = v.REG_NUM) JOIN BOAT AS c ON v.REG_NUM =  c.REG_NUM
+                                          WHERE b.Email_ID = "{user.email}"'''))
+        
+        for b in boats:
+            streets = []
+            locations = db.execute(_sql.sql.text(f'SELECT Street FROM LOCATION WHERE Location_ID = {b.PickUp_Location} OR Location_ID = {b.DropOff_Location}'))
+            for l in locations:
+                streets.append(l.Street)   
+
+            x = _schemas.BookedBoat(
+                num_passengers=b.Num_Of_Passengers, mileage=b.Mileage, model=b.Model, make=b.Make, color=b.Color, price=b.Price, 
+                date_posted=b.Date_Posted, start_date=b.Start_Date, end_date=b.End_Date, pickup=streets[0], dropoff=streets[1], vehicle_type="Boat", type=b.Knots
+            )
+            to_send.append(x)
+
+
+        motorcycles = db.execute(_sql.sql.text(f'''SELECT * FROM ((BOOKS AS B JOIN BOOKING AS q ON b.Booking_ID = q.Booking_ID) 
+                                          JOIN VEHICLE as v on b.Vehicle_ID = v.REG_NUM) JOIN MOTORCYCLE AS c ON v.REG_NUM =  c.REG_NUM
+                                          WHERE b.Email_ID = "{user.email}"'''))
+        
+        for b in motorcycles:
+            streets = []
+            locations = db.execute(_sql.sql.text(f'SELECT Street FROM LOCATION WHERE Location_ID = {b.PickUp_Location} OR Location_ID = {b.DropOff_Location}'))
+            for l in locations:
+                streets.append(l.Street)   
+
+            x = _schemas.BookedMotorcycle(
+                num_passengers=b.Num_Of_Passengers, mileage=b.Mileage, model=b.Model, make=b.Make, color=b.Color, price=b.Price, 
+                date_posted=b.Date_Posted, start_date=b.Start_Date, end_date=b.End_Date, pickup=streets[0], dropoff=streets[1], vehicle_type="Motorcycle", type=b.CC
+            )
+            to_send.append(x)
+        
+
+        jets = db.execute(_sql.sql.text(f'''SELECT * FROM ((BOOKS AS B JOIN BOOKING AS q ON b.Booking_ID = q.Booking_ID) 
+                                          JOIN VEHICLE as v on b.Vehicle_ID = v.REG_NUM) JOIN JET AS c ON v.REG_NUM =  c.REG_NUM
+                                          WHERE b.Email_ID = "{user.email}"'''))
+        
+        for b in jets:
+            streets = []
+            locations = db.execute(_sql.sql.text(f'SELECT Street FROM LOCATION WHERE Location_ID = {b.PickUp_Location} OR Location_ID = {b.DropOff_Location}'))
+            for l in locations:
+                streets.append(l.Street)   
+
+            x = _schemas.BookedJet(
+                num_passengers=b.Num_Of_Passengers, mileage=b.Mileage, model=b.Model, make=b.Make, color=b.Color, price=b.Price, 
+                date_posted=b.Date_Posted, start_date=b.Start_Date, end_date=b.End_Date, pickup=streets[0], dropoff=streets[1], vehicle_type="Jet", type=b.TBO
+            )
+            to_send.append(x)
+
+
         return to_send
+
     

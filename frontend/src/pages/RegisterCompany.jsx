@@ -11,12 +11,17 @@ import { PatternFormat } from 'react-number-format';
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useAppContext } from '../../context/userContext'
+import Axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 
 
 export default function RegisterUser() {
+  const navigate = useNavigate();
 
   const[form,setForm] = useState({name:"",phone:"",street:"",postal:"",city:"",province:""})
+  const {logIn, setUser, user} = useAppContext();
 
   function handler(event){
     setForm(prevForm =>{
@@ -30,8 +35,43 @@ export default function RegisterUser() {
     if(!form.name||!form.phone||!form.street||!form.postal||!form.city||!form.province)
       return emptyFieldToast()
     else{
-  
-      }
+        try {
+          const url = "http://localhost:8000/account/update";
+          Axios.put(url, 
+            {
+              email: user.data.email,
+              ph_Num: form.phone,
+              city: form.city,
+              postal_Code: form.postal,
+              street: form.street,
+              province: form.province,
+              acc_type: "Company"
+            }
+          )
+          .then((response)=>{
+              
+              const url2 = "http://localhost:8000/account/create/company";
+              Axios.post(url2, 
+                {
+                  email: user.data.email,
+                  comp_name: form.name
+                }
+              ).then((response) =>{
+                setUser({});
+                localStorage.clear();
+                navigate("/Login");
+
+              }).catch((error)=>{
+                console.log(error);
+            })
+          })
+          .catch((error)=>{
+              console.log(error);
+          }) 
+        } catch (error) {
+          console.log(error)
+        }
+    }
   }
 
   const emptyFieldToast = () => {
@@ -185,7 +225,7 @@ export default function RegisterUser() {
                         <input type="text" name="province" placeholder="Province" onChange={handler} className="px-4 h-10 w-80 bg-main-grey text-white rounded-3xl outline-white outline-2 focus:outline focus:outline-white hover:outline hover:outline-[#464646]"/>
                     </div>
                     <div className='flex flex-col justify-start items-center gap-y-5 pt-20'>
-                        <input type="text" name="name" placeholder="Company Name" className="px-4 h-10 w-80 bg-main-grey text-white rounded-3xl outline-white outline-2 focus:outline focus:outline-white hover:outline hover:outline-[#464646]"/>
+                        <input type="text" name="name" placeholder="Company Name" onChange={handler} className="px-4 h-10 w-80 bg-main-grey text-white rounded-3xl outline-white outline-2 focus:outline focus:outline-white hover:outline hover:outline-[#464646]"/>
                         <PatternFormat
                             className="px-4 h-10 w-80 bg-main-grey text-white rounded-3xl outline-white outline-2 focus:outline focus:outline-white hover:outline hover:outline-[#464646]"
                             type="tel"
@@ -193,10 +233,9 @@ export default function RegisterUser() {
                             mask="_" 
                             placeholder="phone number"
                             onValueChange={(newValue)=>{
-                            setform2(prevform2 =>({
-                            ...prevform2,
+                            setForm(prevform =>({
+                            ...prevform,
                             phone : newValue.formattedValue
-
                             }))}}
                         />
   

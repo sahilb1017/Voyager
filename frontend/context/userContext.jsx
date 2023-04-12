@@ -11,13 +11,15 @@ export function AppWrapper({ children }) {
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser && Object.keys(storedUser).length > 0) {
-      setUser(storedUser);
+      setUser(JSON.parse(storedUser));
     }
   }, []);
 
   useEffect(() => {
     if (Object.keys(user).length > 0) {
-      localStorage.setItem("user", JSON.stringify(user));
+      if (localStorage.getItem("user") === null) {
+        localStorage.setItem("user", JSON.stringify(user));
+      }
     }
     setIsLoading(false);
   }, [user]);
@@ -28,44 +30,35 @@ export function AppWrapper({ children }) {
     //navigate("/");    
   }
 
-  const logIn = (loginInfo) => {
-    const url = "localhost:8000/account/login";
-    Axios.post(url, loginInfo)
+  const logIn = async(loginInfo) => {
+    const url = "http://localhost:8000/account/login";
+    await Axios.post(url, loginInfo)
     .then((response)=>{
         setUser(response);
-        return (response.acc_type);
-        // if(response.acc_type === "User"){
-        //     //navigate("/Browse");
-        // }
-        // if(response.acc_type === "Company"){
-        //     //navigate("/MyVehicles");
-        // }
-        // if(response.acc_type === "Inspector"){
-        //     //navigate("/Inspect");
-        // }   
+        return (response);
     })
     .catch((error)=>{
         //navigate("/");  
         console.log(error);
-        return (null);
+        return(error);
     })
   }
 
-  const register = (registerInfo) => {
-    const url = "localhost:8000/account/register";
-    Axios.post(url, registerInfo)
+  const register = async (registerInfo) => {
+    const url = "http://localhost:8000/account/create";
+    await Axios.post(url, registerInfo)
     .then((response)=>{
         setUser(response);
-        //navigate('/type');   
+        return (response); 
     })
     .catch((error)=>{
         //navigate("/");  
-        console.log(error);
+        return(error);
     })
   }
 
   const registerInfo = (registerInfo, type) => {
-    const url = "localhost:8000/account/update";
+    const url = "http://localhost:8000/account/update";
     Axios.post(url, registerInfo)
     .then((response)=>{
         setUser(response);

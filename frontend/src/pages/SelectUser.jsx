@@ -12,9 +12,21 @@ import LogoNav from '../components/LogoNav'
 export default function SelectUser() {
     const[usertype,setUserType] = useState("");
     
-    function handler(type){
-      setUserType(type)
+    function handler1(){
+      setUserType("U")
     }
+
+    function handler2(){
+        setUserType("I")
+      }
+    
+      function handler3(){
+        setUserType("C")
+      }
+      
+    
+      
+      
     
 
 
@@ -29,21 +41,21 @@ export default function SelectUser() {
                     <motion.div
                     whileHover={{scale:1.2}}>
                         <div className='flex flex-col justify-center items-center'>
-                            <button className="w-48 h-48" ><img src={User_Logo}onClick={handler('U')} /></button>
+                            <button className="w-48 h-48" ><img src={User_Logo} onClick={handler1} /></button>
                             <h2 className = "text-white text-xl">User</h2>
                         </div>
                     </motion.div>
                     <motion.div
                     whileHover={{scale:1.2}}>
                         <div className='flex flex-col justify-center items-center'>
-                            <button className="w-48 h-48" ><img src={Company_Logo} onClick={handler('C')} /></button>
+                            <button className="w-48 h-48" ><img src={Company_Logo} onClick={handler2} /></button>
                             <h2 className = "text-white text-xl">Company</h2>
                         </div>
                     </motion.div>
                     <motion.div
                     whileHover={{scale:1.2}}>
                         <div className='flex flex-col justify-center items-center'>
-                            <button className="w-48 h-48" ><img src={Inspector_Logo} onClick={handler('I')} /></button>
+                            <button className="w-48 h-48" ><img src={Inspector_Logo} onClick={handler3} /></button>
                             <h2 className = "text-white text-xl">Inspector</h2>
                         </div>
                     </motion.div>

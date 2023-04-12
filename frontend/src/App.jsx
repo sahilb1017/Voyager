@@ -9,7 +9,10 @@ import Browse from "./pages/Browse";
 import Inspect from "./pages/Inspect";
 import MyRentals from "./pages/MyRentals";
 import MyVehicles from "./pages/MyVehicles";
+import InspectionReport from "./pages/InspectionReport";
+import Post from "./pages/Post";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+
 
 export default function App() {
   return (
@@ -27,6 +30,8 @@ export default function App() {
           <Route path="/Inspect" element={<Inspect />} />
           <Route path="/MyRentals" element={<MyRentals />} />
           <Route path="/MyVehicles" element={<MyVehicles />} />
+          <Route path="/InspectionReport"element = {<InspectionReport/>}/>
+          <Route path="/Post"element = {<Post/>}/>
         </Routes>
       </Router>
     </div>

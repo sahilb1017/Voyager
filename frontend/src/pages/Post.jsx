@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import BookingNav from '../components/BookingNav'
-import Car from "/Test.png"
 import Calandar from "/calandar.png"
 import Human from "/human.png"
 import Colour from "/colour.png"
@@ -14,6 +13,13 @@ import Maker from "/Company_logo.png"
 import Model from "/model.png"
 import Registration from "/registration.png"
 import License from "/license.png"
+import Car from "/car.png"
+import Truck from "/truck.png"
+import Motorcycle from "/motorcycle.png"
+import Boat from "/boat.png"
+import Jet from "/jet.png"
+import File from "/file.png"
+import Extra from "/information.png"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Select from "react-select"
@@ -26,10 +32,10 @@ import LandingNav from '../components/LandingNav'
 
 export default function InspectionReport() {
 
-    const[information,setInformation] = useState({type:"",brand:"",model:"",registration:"", license:"",passenger:"",colour:"",mileage:"",units:"",price:0})
-
+    const[information,setInformation] = useState({type:"",brand:"",model:"",registration:"", license:"",passenger:-1,colour:"",mileage:"",units:"",price:"",extra:""})
+    const[image,setImage] = useState()
+    const[placeholder,setPlaceholder] = useState("-------------------------")
     console.log(information)
-
     const mileageOptions=[
         {
             name: "mpg",
@@ -65,19 +71,12 @@ export default function InspectionReport() {
       ]
 
       function handler(event){
-        if(event.target.name === "price"){
-        setInformation(prevForm =>{
-                return{
-                ...prevForm,
-                [event.target.name]:parseInt(event.target.value)
-        }  
-        })}
-        else{setInformation(prevForm =>{
+       setInformation(prevForm =>{
             return{
             ...prevForm,
             [event.target.name]:event.target.value
         }
-        })}}
+        })}
 
     
 
@@ -91,6 +90,30 @@ export default function InspectionReport() {
               },
         });
     }
+
+    const invalidPassengerToast = () => {
+        toast.error('Please fill in a valid number for the Passenger field', {
+            position: toast.POSITION.TOP_RIGHT,
+            toastId: "invalidPass",
+            style: {
+                backgroundColor: '#353535',
+                color: '#87A1FF'
+              },
+        });
+    }
+
+    
+    const invalidPriceToast = () => {
+        toast.error('Please fill in a valid number for the Price field', {
+            position: toast.POSITION.TOP_RIGHT,
+            toastId: "invalidPrice",
+            style: {
+                backgroundColor: '#353535',
+                color: '#87A1FF'
+              },
+        });
+    }
+
 
     
 
@@ -202,11 +225,19 @@ export default function InspectionReport() {
     }
 
       function submitHandler(){
-        if(!report.clean||!report.damage||report.decision ===-1||!report.review){
+        if(!information.type||!information.brand||!information.model||!information.registration||!information.license||information.passenger==-1||!information.colour||!information.mileage||
+            !information.units||!information.price||!information.extra){
             emptyFieldToast()
         }
-        else{
+        else if (information.passenger<0){
+            invalidPassengerToast()
+        }
 
+        else if (information.price<0){
+            invalidPriceToast()
+        }
+        else{
+            var mileage = information.mileage+information.units
         }
       }
 
@@ -218,8 +249,24 @@ export default function InspectionReport() {
             <div className = "flex flex-col items-center justify-center"> 
                 <div className = "w-[80%]">
                     <div className="flex flex-row items-center justify-center pt-20">
-                        <div className = "flex flex-row items-center gap-x-32 h-[400px]">
-                            <div className = "w-[500px] h-full bg-white"/>
+                        <div className = "flex flex-row items-center gap-x-20 h-[400px]">
+                            <div className = "w-[400px] h-full border-2 border-main-blue">
+                                <div className=' w-[90%] h-[90%] flex flex-col justify-center items-center m-auto'>
+                                    {image!=undefined&&
+                                        <img src = {image} style={{ 
+                                            width: '100%', 
+                                            height: '100%', 
+                                            objectFit: 'cover' 
+                                            }}  />}
+                                    {image==undefined&&
+                                        <img src = {File} style={{ 
+                                            width: '20%', 
+                                            height: '20%', 
+                                            objectFit: 'cover' 
+                                            }}  />}
+                                        
+                                </div>
+                            </div>
                             <div className = "flex flex-col justify-center items-start h-full gap-y-10">
                             <Select
                                         boxShadow = "border-box"
@@ -231,6 +278,32 @@ export default function InspectionReport() {
                                             return options["val"];
                                         }}
                                         onChange={(newValue) => {
+                                            if(newValue.val === "Car")
+                                                {
+                                                    setImage(Car)
+                                                    setPlaceholder("Type")
+                                                }
+                                            else if(newValue.val === "Truck")
+                                                 {
+                                                    setImage(Truck)
+                                                    setPlaceholder("Tonnage")
+                                                }
+                                            else if(newValue.val === "Motorcycle")
+                                                {
+                                                    setImage(Motorcycle)
+                                                    setPlaceholder("CC")
+                                                }
+                                            else if(newValue.val === "Boat")
+                                                {
+                                                    setImage(Boat)
+                                                    setPlaceholder("Knots")
+                                                }  
+                                            
+                                            else if(newValue.val === "Jet")
+                                                {
+                                                    setImage(Jet)
+                                                    setPlaceholder("TBO")
+                                                }  
                                             setInformation(prevInfo=>({
                                                 ...prevInfo,
                                                 type:newValue.val
@@ -302,18 +375,33 @@ export default function InspectionReport() {
                                 </div>
                                 <div className="px-4 h-12 w-72 bg-black text-white rounded-xl  border-2 border-main-blue outline-none hover:border-[3px] hover:border-main-blue focus:border-[3px] focus:border-main-blue">
                                     <div className = "flex flex-row justify-center items-center w-full h-full">
-                                        <img src ={Price} className="w-[10px] ml-[.5rem] mr-[0.4rem]"></img>
-                                        <input type="text" name="price" value = {information.price} placeholder="Price / Day" className="px-4 h-full w-full bg-black text-white rounded-xl outline-none "/>
+                                        <img src ={Extra} className="w-[25px] h-[20px]"></img>
+                                        <input type="text" name="extra" placeholder={placeholder} onChange = {handler} className="px-4 h-full w-full bg-black text-white rounded-xl outline-none "/>
                                     </div>
                                 </div>
-                                
+                                <div className="px-4 h-12 w-72 bg-black text-white rounded-xl  border-2 border-main-blue outline-none hover:border-[3px] hover:border-main-blue focus:border-[3px] focus:border-main-blue">
+                                    <div className = "flex flex-row justify-center items-center w-full h-full">
+                                        <img src ={Price} className="w-[10px] ml-[.5rem] mr-[0.4rem]"></img>
+                                        <input type="number" name="price"  onChange = {handler} placeholder="Price / Day" className="px-4 h-full w-full bg-black text-white rounded-xl outline-none "/>
+                                    </div>
+                                </div>                        
                             </div>
-                                
                             </div>
-                        </div>
-
+                        </div>         
                     </div>
                                
+            </div>
+            <div className = "flex flex-row justify-center items-center w-full">
+                <button  className="bg-main-blue text-white text-xl rounded-3xl w-32 h-12  mt-16 hover:bg-[#5f82ff]">
+                    Post
+                </button>  
+                <ToastContainer hideProgressBar={true}/>
+                                    <style>
+                                    {
+                                    `.Toastify__toast--error .Toastify__toast-icon svg path {
+                                        fill: #87A1FF;
+                                    }`}
+                                    </style>
             </div>
         </div>
 

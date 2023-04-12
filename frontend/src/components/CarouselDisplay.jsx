@@ -3,9 +3,10 @@ import Carousel from 'react-elastic-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import CarCard from './CarCard';
 import products from '../test.js';
+import { Link } from 'react-router-dom';
 
 function CarouselDisplay(props) {
-  console.log(props.vehicle);
+  const next = props.card_type == "Browse" ? "/Booking" : "/InspectionReport"
   const breakPoints = [
     { width: 1, itemsToShow: 1 },
     { width: 550, itemsToShow: 2 },
@@ -22,6 +23,8 @@ function CarouselDisplay(props) {
   {props.vehicle && props.vehicle.length > 0 ? (
     <Carousel breakPoints={breakPoints}>
       {props.vehicle.map((value) => (
+
+        <Link to={next} state={{from: value}}>
         <CarCard
           key={value.name}
           name={value.name}
@@ -34,6 +37,7 @@ function CarouselDisplay(props) {
           }
           price={value.price}
         />
+        </Link>
       ))}
     </Carousel>
   ) : <p class="pb-16 text-white" > No postings</p>}

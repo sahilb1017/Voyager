@@ -97,6 +97,7 @@ function Browse() {
             <div className="mb-12">
               <p className="text-white text-2xl font-bold pb-8">Cars</p>
               <CarouselDisplay 
+                card_type = "Browse"
                 vehicle={cars}
               />
             </div>
@@ -104,6 +105,7 @@ function Browse() {
             <div className="mb-12">
               <p className="text-white text-2xl font-bold pb-8">Trucks</p>
               <CarouselDisplay
+                card_type = "Browse"
                 vehicle={trucks}
               />
             </div>
@@ -111,6 +113,7 @@ function Browse() {
             <div className="mb-12">
               <p className="text-white text-2xl font-bold pb-8">Motorcycles</p>
               <CarouselDisplay 
+                card_type = "Browse"
                 vehicle={motorcycles}
               />
             </div>
@@ -118,6 +121,7 @@ function Browse() {
             <div className="mb-12">
               <p className="text-white text-2xl font-bold pb-8">Boats</p>
               <CarouselDisplay 
+                card_type = "Browse"
                 vehicle={boats}
               />
             </div>
@@ -125,6 +129,7 @@ function Browse() {
             <div className="mb-12">
               <p className="text-white text-2xl font-bold pb-8">Jets</p>
               <CarouselDisplay 
+                card_type = "Browse"
                 vehicle={jets}
               />
             </div>

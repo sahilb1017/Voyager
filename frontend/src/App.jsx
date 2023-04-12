@@ -29,6 +29,7 @@ export default function App() {
             <Route path="/Booking"element = {<Booking/>}/>
             <Route path="/Browse" element={<Browse />} />
             <Route path="/Inspect" element={<Inspect />} />
+            <Route path="InspectionReport" element={<InspectionReport />}/>
             <Route path="/MyRentals" element={<MyRentals />} />
             <Route path="/MyVehicles" element={<MyVehicles />} />
             <Route path="/InspectionReport"element = {<InspectionReport/>}/>

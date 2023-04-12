@@ -14,17 +14,15 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Select from "react-select"
 import LandingNav from '../components/LandingNav'
-
-
-
-
+import { useLocation } from 'react-router-dom'
 
 
 export default function InspectionReport() {
+    const location = useLocation()
+    const { from } = location.state
 
     const [report,setReport] = useState({clean:"",damage:"",review:"",decision:-1})
-    const[information,setInformation] = useState({date:"",copacity:"",color:"",mileage:"",price:0})
-    console.log(report)
+    const[information,setInformation] = useState({date:"",capacity:0,color:"",mileage:"",price:""})
     const cleanOptions=[
         {
             name: "1 - Unacceptable Cleanliness",
@@ -110,13 +108,12 @@ export default function InspectionReport() {
       ]  
 
     useEffect(() => {
-      
       setInformation({
-        date:"Feb 20,2023",
-        capacity:"5",
-        color:"White",
-        mileage:"272",
-        price:69
+        date: from.date_posted,
+        capacity:from.num_passengers,
+        color:from.color,
+        mileage:from.mileage,
+        price:from.price
       })
       
     },[]);
@@ -204,7 +201,7 @@ export default function InspectionReport() {
     return (
         <div className="h-full w-full">
             <LandingNav 
-            type="User"
+            type="Inspector"
             />
             <div className = "flex flex-col items-center justify-center"> 
                 <div className = "w-[80%]">
@@ -219,23 +216,23 @@ export default function InspectionReport() {
                             <div className = "flex flex-col justify-start items-start h-full gap-y-4">
                                 <div className = "flex flex-row justify-center items-center gap-x-3">
                                     <img src ={Calandar} className="w-[25px] h-[25px]"></img>
-                                    <h2 className="text-white text-lg"> Feb 20,2023</h2>
+                                    <h2 className="text-white text-lg">{information.date}</h2>
                                 </div>
                                 <div className = "flex flex-row justify-center items-center gap-x-3">
                                     <img src ={Human} className="w-[25px] h-[25px]"></img>
-                                    <h2 className="text-white text-lg"> 5 Adults</h2>
+                                    <h2 className="text-white text-lg">{information.capacity} Adults</h2>
                                 </div>
                                 <div className = "flex flex-row justify-center items-center gap-x-3">
                                     <img src ={Colour} className="w-[25px] h-[25px]"></img>
-                                    <h2 className="text-white text-lg"> White</h2>
+                                    <h2 className="text-white text-lg">{information.color}</h2>
                                 </div>
                                 <div className = "flex flex-row justify-center items-center gap-x-3">
                                     <img src ={Mileage} className="w-[23px] h-[23px]"></img>
-                                    <h2 className="text-white text-lg">272 Miles</h2>
+                                    <h2 className="text-white text-lg">{information.mileage}</h2>
                                 </div>
                                 <div className = "flex flex-row justify-center items-center gap-x-3 ml-[0.3rem]">
                                     <img src ={Price} className="w-[12px] mr-[0.45rem]"></img>
-                                    <h2 className="text-white text-lg">$69/day</h2>
+                                    <h2 className="text-white text-lg">{information.price}</h2>
                                 </div>
                                 
                             </div>

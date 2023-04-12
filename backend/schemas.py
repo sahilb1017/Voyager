@@ -62,6 +62,7 @@ class _VehicleBase(_pydantic.BaseModel):
     color: str
     price: str
     owner_id: str
+    vehicle_type: str
 
 
 class VehicleCreate(_VehicleBase):
@@ -176,9 +177,35 @@ class BookedVehicle(_pydantic.BaseModel):
     end_date: str
     pickup: str
     dropoff: str
+    vehicle_type: str
+    class Config:
+        orm_mode = True  
+
+class BookedCar(BookedVehicle):
     type: str
     class Config:
         orm_mode = True  
+
+
+class BookedTruck(BookedVehicle):
+    tonnage: str
+    class Config:
+        orm_mode = True    
+
+class BookedBoat(BookedVehicle):
+    knots: str
+    class Config:
+        orm_mode = True  
+
+class BookedMotorcycle(BookedVehicle):
+    cc: str
+    class Config:
+        orm_mode = True  
+
+class BookedJet(BookedVehicle):
+    tbo: str
+    class Config:
+        orm_mode = True 
 
 
 class Pending(_pydantic.BaseModel):

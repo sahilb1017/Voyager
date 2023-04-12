@@ -49,7 +49,7 @@ export default function RegisterUser() {
             }
           )
           .then((response)=>{
-              setUser(response);
+              
               const url2 = "http://localhost:8000/account/create/company";
               Axios.post(url2, 
                 {
@@ -57,7 +57,9 @@ export default function RegisterUser() {
                   comp_name: form.name
                 }
               ).then((response) =>{
-                navigate("/MyVehicles")
+                setUser({});
+                localStorage.clear();
+                navigate("/Login");
 
               }).catch((error)=>{
                 console.log(error);

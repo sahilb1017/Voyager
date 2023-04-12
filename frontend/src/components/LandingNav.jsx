@@ -71,11 +71,11 @@ export default function LandingNav(props) {
               Browse
               <span class="block max-w-0 group-hover:max-w-full transition-all duration-400 h-0.5 bg-main-blue"></span>
             </Link>
-            <Link to="/" class="group transition duration-300 block mt-4 lg:inline-block lg:mt-0 text-main-blue mr-12">
+            <Link to="/MyRentals" class="group transition duration-300 block mt-4 lg:inline-block lg:mt-0 text-main-blue mr-12">
               My Rentals
               <span class="block max-w-0 group-hover:max-w-full transition-all duration-400 h-0.5 bg-main-blue"></span>
             </Link>
-            <Link to="/" class="group transition duration-300 block mt-4 lg:inline-block lg:mt-0 text-main-blue mr-12">
+            <Link to="/MyVehicles" class="group transition duration-300 block mt-4 lg:inline-block lg:mt-0 text-main-blue mr-12">
               My Vehicles
               <span class="block max-w-0 group-hover:max-w-full transition-all duration-400 h-0.5 bg-main-blue"></span>
             </Link>
@@ -103,7 +103,7 @@ export default function LandingNav(props) {
         </div>
         <div class={`w-full ${isMenuOpen ? '' : 'hidden'} lg:flex lg:items-center lg:w-auto flex-grow-row-reverse lg:mr-56 font-bold`}>
           <div class="text-lg lg:flex-grow ">
-            <Link to="/" class="group transition duration-300 block mt-4 lg:inline-block lg:mt-0 text-main-blue mr-12">
+            <Link to="/MyVehicles" class="group transition duration-300 block mt-4 lg:inline-block lg:mt-0 text-main-blue mr-12">
               My Vehicles
               <span class="block max-w-0 group-hover:max-w-full transition-all duration-400 h-0.5 bg-main-blue"></span>
             </Link>

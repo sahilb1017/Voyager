@@ -61,7 +61,6 @@ function RegisterUserHandler(){
         }
       )
       .then((response)=>{
-          setUser(response);
           const url2 = "http://localhost:8000/account/create/" + type;
           Axios.post(url2.toLowerCase(), 
             {
@@ -71,12 +70,9 @@ function RegisterUserHandler(){
               dob: form.birthdate
             }
           ).then((response) =>{
-            if(type == "User"){
-              navigate("/Browse")
-            }
-            else if(type == "Inspector"){
-              navigate("/Inspect")
-            }
+              setUser({});
+              localStorage.clear();
+              navigate("/Login");
           }).catch((error)=>{
             console.log(error);
         })

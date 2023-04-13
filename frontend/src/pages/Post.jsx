@@ -126,6 +126,19 @@ export default function InspectionReport() {
         });
     }
 
+    const existingInformation = () => {
+        toast.error('This vehicle exists', {
+            position: toast.POSITION.TOP_RIGHT,
+            toastId: "invali",
+            style: {
+                backgroundColor: '#353535',
+                color: '#87A1FF'
+              },
+        });
+    }
+
+    
+
 
     
 
@@ -271,7 +284,7 @@ export default function InspectionReport() {
                     navigate("/MyVehicles");
                 }) 
                 .catch((error)=>{
-                    alert("no")
+                    existingInformation();
                 })
             } catch (error) {
                 

@@ -324,7 +324,7 @@ export default function View() {
                                 </div>
                                 <div className = "flex flex-row justify-center items-center gap-x-3 ml-1">
                                     <img src ={Price} className="w-[10px] m-auto"></img>
-                                    <h2 className="text-white text-base ml-2">{from.price}</h2>
+                                    <h2 className="text-white text-base ml-2">${from.price}</h2>
                                 </div>
                                 
                                 <div className = "mt-8 ">

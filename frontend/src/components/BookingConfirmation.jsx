@@ -1,4 +1,8 @@
-import Car from "/Test.png"
+import Car from "/car.png"
+import Truck from "/truck.png"
+import Motorcycle from "/motorcycle.png"
+import Boat from "/boat.png"
+import Jet from "/jet.png"
 import Calandar from "/calandar.png"
 import Location from "/location.png"
 import moment from "moment"
@@ -141,11 +145,12 @@ export default function BookingConfirmation({form,information,pick,drop,open, ot
                 setCouponVal(response.data.discount);
             })
             .catch((error)=>{
+                invalidCouponToast();
                 console.log(error)
             })
         } catch (error) {
             
-            invalidCouponToast();
+            
             
         }
       }
@@ -240,7 +245,13 @@ export default function BookingConfirmation({form,information,pick,drop,open, ot
                 <div className = "flex flex-col items-center justify-center"> 
                         <div className="flex flex-row items-center justify-center pt-8">
                             <div className = "flex flex-row justify-center items-center gap-x-12 h-[350px]">
-                                <img className = "w-[400px] h-full "src={Car}/>
+
+                                <img className = "w-[400px] h-full "src={other.vehicle_type == "Car" ? Car:
+                              other.vehicle_type == "Truck" ? Truck:
+                              other.vehicle_type == "Boat" ? Boat:
+                              other.vehicle_type == "Motorcycle" ? Motorcycle:
+                              Jet}/>
+
                                 <div className = "flex flex-col justify-start items-start h-full gap-y-8">
                                         <div className = "flex flex-row gap-x-4">
                                             <div className = "flex flex-col justify-start items-start h-full gap-y-4">
@@ -323,7 +334,7 @@ export default function BookingConfirmation({form,information,pick,drop,open, ot
                             ${price}
                         </h1>
                         <button className="bg-main-blue text-white rounded-3xl w-48 h-12 hover:bg-[#5f82ff]" onClick={confirmHandler}>
-                            Confrim Booking 
+                            Confirm  Booking 
                         </button>
                     </div>
         </div>

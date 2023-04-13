@@ -38,6 +38,17 @@ export default function Login() {
         });
     };
 
+    const wrongPassword = () => {
+        toast.error('Invalid Password', {
+            position: toast.POSITION.TOP_RIGHT,
+            toastId: "EmptyFieldValid",
+            style: {
+                backgroundColor: '#353535',
+                color: '#87A1FF'
+              },
+        });
+    };
+
 
 
     async function LoginHandler(){
@@ -54,15 +65,14 @@ export default function Login() {
                     navigate("/Browse");
                 }
                 if(userType == "Company"){
-                    navigate("/Browse");
+                    navigate("/MyVehicles");
                 }
                 if(userType == "Inspector"){
                     navigate("/Inspect");
                 } 
             })
             .catch((error)=>{
-                navigate("/");
-                console.log(error)
+                wrongPassword();
             })
              
         } catch (error) {

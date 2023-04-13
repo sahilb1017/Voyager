@@ -93,7 +93,9 @@ export default function SignUp() {
   return (
     <div className='flex flex-col items-center justify-center'>
     <div className='mt-16 flex flex-col items-center justify-center'>
-        <img src={Voyager_Logo} class="fill-current " width="400" viewBox="0 0 283 74"></img>
+        <Link to={"/"}>
+            <img src={Voyager_Logo} class="fill-current " width="400" viewBox="0 0 283 74"></img>
+        </Link>
         <h1 className ='text-3xl text-white text-center mt-10 font-bold'>
             Sign Up
         </h1>

@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import BookingNav from '../components/BookingNav'
-import Car from "/Test.png"
+import Car from "/car.png"
+import Truck from "/truck.png"
+import Motorcycle from "/motorcycle.png"
+import Boat from "/boat.png"
+import Jet from "/jet.png"
 import Calandar from "/calandar.png"
 import Human from "/human.png"
 import Colour from "/colour.png"
@@ -237,8 +241,14 @@ export default function InspectionReport() {
                         </h1>
                     </div>
                     <div className="flex flex-row items-center justify-center pt-10">
+
                         <div className = "flex flex-row items-center gap-x-32 h-[350px]">
-                            <img className = "w-[400px] h-full "src={Car}/>
+                            <img className = "w-[400px] h-full "src={from.vehicle_type == "Car" ? Car:
+                              from.vehicle_type == "Truck" ? Truck:
+                              from.vehicle_type == "Boat" ? Boat:
+                              from.vehicle_type == "Motorcycle" ? Motorcycle:
+                              Jet}/>
+
                             <div className = "flex flex-col justify-start items-start h-full gap-y-4">
                                 <div className = "flex flex-row justify-center items-center gap-x-3">
                                     <img src ={Calandar} className="w-[25px] h-[25px]"></img>

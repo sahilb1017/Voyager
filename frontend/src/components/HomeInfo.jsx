@@ -19,7 +19,7 @@ function HomeInfo() {
                         Find your voyage
                     </button>
                     <button class="bg-transparent hover:bg-main-blue text-main-blue font-bold hover:text-white py-2 px-4 border border-main-blue hover:border-transparent rounded">
-                        Rent your vehicle
+                        Provide a Voyage
                     </button>
                 </div>
             </div>

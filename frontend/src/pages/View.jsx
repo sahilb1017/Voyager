@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import LandingNav from '../components/LandingNav'
-import Car from "/Test.png"
+import Car from "/car.png"
+import Truck from "/truck.png"
+import Motorcycle from "/motorcycle.png"
+import Boat from "/boat.png"
+import Jet from "/jet.png"
 import Calandar from "/calandar.png"
 import Human from "/human.png"
 import Colour from "/colour.png"
@@ -35,7 +39,8 @@ export default function View() {
     const[drop,setDrop] = useState({city:"",postal:"",street:"",province:""})
     const[pick,setPick] = useState({city:"",postal:"",street:"",province:""})
     const location = useLocation()
-    const { from } = location.state
+    const { from } = location.state;
+    console.log(from);
 
 
     function handleConfirmationBackDrop(){
@@ -249,14 +254,20 @@ export default function View() {
             <LandingNav type="User"/>
             <div className = "flex flex-col items-center justify-center"> 
                 <div className = "w-[80%]">
-                    <div className = "flex flex-row ml-[1.7rem] mt-16">
+                    <div className = "flex flex-row ml-[16rem] mt-16">
                         <h1 className ='text-3xl text-white font-bold'>
                             {from.make} {from.model}
                         </h1>
                     </div>
                     <div className="flex flex-row items-center justify-center pt-10">
-                        <div className = "flex flex-row items-center gap-x-16 h-[350px]">
-                            <img className = "w-[400px] h-full "src={Car}/>
+                        <div className = "flex flex-row items-center gap-x-20 h-[350px] ">
+
+                            <img className = "w-[400px] h-full "src={from.vehicle_type == "Car" ? Car:
+                              from.vehicle_type == "Truck" ? Truck:
+                              from.vehicle_type == "Boat" ? Boat:
+                              from.vehicle_type == "Motorcycle" ? Motorcycle:
+                              Jet}/>
+
                             <div className = "flex flex-col justify-start items-start h-full gap-y-4">
                                 <div className = "flex flex-row justify-center items-center gap-x-3">
                                     <img src ={Calandar} className="w-[25px] h-[25px]"></img>
@@ -278,39 +289,23 @@ export default function View() {
                                     <img src ={Information} className="w-[25px]"></img>
                                     <h2 className="text-white text-base">{information.extra}</h2>
                                 </div>
-                                <div className = "-mt-2">
+                                <div className = "-mt-2 ">
                                     <h1 className = "text-white text-base mb-1 ml-1 ">
                                         Start Date
                                     </h1>
-                                        <div className=" h-8 w-56 bg-black text-white rounded-lg  border-2 border-main-blue outline-none hover:border-[3px] hover:border-main-blue focus:border-[3px] focus:border-main-blue" >
-                                            <ThemeProvider theme={theme}>
-                                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                        <DatePicker 
-                                                        slotProps={{
-                                                            textField: {
-                                                            placeholder: 'Start Date'},
-                                                        }}
-                                                        disableHighlightToday = {true}
-                                                        selected = {true}
-                                                        format="MMMM D, YYYY"
-                                                        disablePast = {true}
-                                                        onChange={(newValue)=>{
-                                                            setForm(prevForm =>({
-                                                            ...prevForm,
-                                                            start : moment(new Date(newValue)).format('YYYY-MM-DD')
-
-                                                    }))}}/>
-                                                </LocalizationProvider>
-                                        </ThemeProvider>
+                                        <div className="px-4 h-8 w-56 bg-black text-white rounded-lg  border-2 border-main-blue outline-none hover:border-[3px] hover:border-main-blue focus:border-[3px] focus:border-main-blue">
+                                            <div className = "flex flex-row  items-center w-full h-full">
+                                                <p>{from.start_date}</p>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className = "-mt-1">
                                     <h1 className = "text-white text-base mb-1 ml-1 ">
-                                            Pick Up
+                                          Pick up
                                     </h1>
-                                    <button onClick={handlePickBackDrop} className="px-4 h-8 w-56 bg-black text-white rounded-lg  border-2 border-main-blue outline-none hover:border-[3px] hover:border-main-blue focus:border-[3px] focus:border-main-blue">
-                                        {pick.street}
-                                    </button>
+                                    <div className="px-4 h-8 w-56 bg-black text-white rounded-lg  border-2 border-main-blue outline-none ">
+                                          <p>{from.pickup}</p>
+                                    </div>
                                 </div>
                                 
                             </div>
@@ -329,84 +324,35 @@ export default function View() {
                                 </div>
                                 <div className = "flex flex-row justify-center items-center gap-x-3 ml-1">
                                     <img src ={Price} className="w-[10px] m-auto"></img>
-                                    <h2 className="text-white text-base ml-2">{information.price}</h2>
+                                    <h2 className="text-white text-base ml-2">{from.price}</h2>
                                 </div>
-                                <div className = "mt-8">
+                                
+                                <div className = "mt-8 ">
                                     <h1 className = "text-white text-base mb-1 ml-1 ">
                                         End Date
                                     </h1>
-                                        <div className=" h-8 w-56 bg-black border-2 border-main-blue rounded-lg outline-white outline-2 focus:outline focus:outline-white hover:outline hover:outline-[#464646]" >
-                                            <ThemeProvider theme={theme}>
-                                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                        <DatePicker 
-                                                        slotProps={{
-                                                            textField: {
-                                                            placeholder: 'End Date'},
-                                                        }}
-                                                        disableHighlightToday = {true}
-                                                        selected = {true}
-                                                        disablePast = {true}
-                                                        format="MMMM D, YYYY"
-                                                        onChange={(newValue)=>{
-                                                            setForm(prevForm =>({
-                                                            ...prevForm,
-                                                            end : moment(new Date(newValue)).format('YYYY-MM-DD')
-
-                                                    }))}}/>
-                                                </LocalizationProvider>
-                                        </ThemeProvider>
+                                        <div className="px-4 h-8 w-56 bg-black text-white rounded-lg  border-2 border-main-blue outline-none hover:border-[3px] hover:border-main-blue focus:border-[3px] focus:border-main-blue">
+                                            <div className = "flex flex-row  items-center w-full h-full">
+                                                <p>{from.end_date}</p>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className = "-mt-1">
                                     <h1 className = "text-white text-base mb-1 ml-1 ">
                                           Drop Off
                                     </h1>
-                                    <button onClick={handleDropBackDrop} className="px-4 h-8 w-56 bg-black text-white rounded-lg  border-2 border-main-blue outline-none hover:border-[3px] hover:border-main-blue focus:border-[3px] focus:border-main-blue">
-                                          {drop.street}
-                                    </button>
+                                    <div className="px-4 h-8 w-56 bg-black text-white rounded-lg  border-2 border-main-blue outline-none ">
+                                          <p>{from.dropoff}</p>
+                                    </div>
                                 </div>
                             </div>
-                            <div>
-                                <button onClick={BookingConfirmationHandler} className="bg-main-blue text-white rounded-xl w-36 h-8 mt-[17rem] hover:bg-[#5f82ff]">
-                                    Book it
-                                </button>
-                                <ToastContainer hideProgressBar={true}/>
-                                    <style>
-                                    {
-                                    `.Toastify__toast--error .Toastify__toast-icon svg path {
-                                        fill: #87A1FF;
-                                    }`}
-                                    </style>
-                            </div>
+                            
                         </div>
                     </div>
                                
             </div>
             </div>
-            <Backdrop
-                open={open}
-                onClick={handleConfirmationClose}
-                >
-                <div>
-                    <BookingConfirmation form = {form} information = {information} pick = {pick} drop = {drop} open = {open}/>
-                </div>
-            </Backdrop>
-            <Backdrop
-                open={openPick}
-                onClick={handlePickClose}
-                >
-                <div>
-                    <LocationModel Location = {pick} setLocation = {setPick} open = {openPick} setOpen = {setOpenPick} heading = "Pick Up Location"/>
-                </div>
-            </Backdrop>
-            <Backdrop
-                open={openDrop}
-                onClick={handleDropClose}
-                >
-                <div>
-                    <LocationModel Location = {drop} setLocation = {setDrop} open = {openDrop} setOpen = {setOpenDrop} heading = "Drop Off Location"/>
-                </div>
-            </Backdrop>
+
             
         </div>
     )

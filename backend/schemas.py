@@ -178,6 +178,9 @@ class BookedVehicle(_pydantic.BaseModel):
     pickup: str
     dropoff: str
     vehicle_type: str
+    cleanliness: str
+    damages: str
+    overall: str
     class Config:
         orm_mode = True  
 
@@ -220,6 +223,7 @@ class Pending(_pydantic.BaseModel):
 
 
 class InspectionDetails(_pydantic.BaseModel):
+    reg_num: str
     num_passengers: int
     mileage: str
     model: str

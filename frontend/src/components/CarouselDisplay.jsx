@@ -10,7 +10,8 @@ import { useAppContext } from '../../context/userContext'
 function CarouselDisplay(props) {
   const {logIn, setUser, user} = useAppContext();
   const next = props.card_type == "Browse" ? "/Booking" :
-  props.card_type == "MyVehicle" ? "/MyVehicles" 
+  props.card_type == "MyVehicle" ? "/MyVehicles" :
+  props.card_type == "MyRentals" ? "/View" 
   : "/InspectionReport"
   const breakPoints = [
     { width: 1, itemsToShow: 1 },
@@ -43,6 +44,7 @@ function CarouselDisplay(props) {
                 value.tbo
           }
           price={value.price}
+          vehicle_type={value.vehicle_type}
         />
         </Link>
       ))}

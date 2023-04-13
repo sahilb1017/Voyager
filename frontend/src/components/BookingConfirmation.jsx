@@ -9,10 +9,12 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Axios from "axios";
 import { useAppContext } from '../../context/userContext'
+import { useNavigate } from "react-router-dom";
 
 
 export default function BookingConfirmation({form,information,pick,drop,open, other}) {
 
+    const navigate = useNavigate();
     const {logIn, setUser, user} = useAppContext();
     const[couponID,setCouponID] = useState(0)
     const[couponVal,setCouponVal] = useState(0)
@@ -21,14 +23,36 @@ export default function BookingConfirmation({form,information,pick,drop,open, ot
     const [num, setNum] = useState(0)
     console.log(insurance)
     useEffect(() => {
-      
+
         const date1 = new Date(form.start)
         const date2 = new Date(form.end)
-        const dayPrice = insurance.price.replace(/\D/g,'');
+        const dayPrice = other.price.replace(/\D/g,'');
         setNum(Math.ceil(Math.abs(date2 - date1)/ (1000 * 60 * 60 * 24)))
         SetPrice((Math.ceil(Math.abs(date2 - date1)/ (1000 * 60 * 60 * 24))*(parseInt(dayPrice))+insurance.price)-couponVal)
-        
-      },[open,insurance,couponVal]);
+
+      },[couponVal]);
+
+    useEffect(() => {
+
+        const date1 = new Date(form.start)
+        const date2 = new Date(form.end)
+        const dayPrice = other.price.replace(/\D/g,'');
+        setNum(Math.ceil(Math.abs(date2 - date1)/ (1000 * 60 * 60 * 24)))
+        SetPrice(Math.ceil(Math.abs(date2 - date1)/ (1000 * 60 * 60 * 24))*parseInt(dayPrice)+insurance.price)
+        setCouponID(0)
+        setCouponVal(0)
+
+      },[open]);
+
+    useEffect(() => {
+
+        const date1 = new Date(form.start)
+        const date2 = new Date(form.end)
+        const dayPrice = other.price.replace(/\D/g,'');
+        setNum(Math.ceil(Math.abs(date2 - date1)/ (1000 * 60 * 60 * 24)))
+        SetPrice((Math.ceil(Math.abs(date2 - date1)/ (1000 * 60 * 60 * 24))*(parseInt(dayPrice))+insurance.price)-couponVal)
+
+      },[insurance]);
 
     const invalidCouponToast = () => {
         toast.error('Invalid coupon', {
@@ -42,9 +66,49 @@ export default function BookingConfirmation({form,information,pick,drop,open, ot
     };
 
     const handleInputChange = (event) => {
-        const { value } = event.target;
-        setCouponID(value);
+        setCouponID(event.target.value);
       };
+
+    const confirmHandler = () =>{
+        const url = "http://localhost:8000/booking/create";
+        const obj = {
+            vehicle_reg: other.reg_num,
+            email: user.data.email,
+            num_days: num,
+            start_date: form.start,
+            end_date: form.end,
+            insurance_id: insurance.index,
+            coupon_id: couponID ? couponID : 0,
+            pickup: {
+              city: pick.city,
+              postal_code: pick.postal,
+              street: pick.street,
+              province: pick.province
+            },
+            dropoff: {
+              city: drop.city,
+              postal_code: drop.postal,
+              street: drop.street,
+              province: drop.province
+            },
+            cost: price,
+            discount: couponVal
+          }
+
+          console.log(other)
+          try {
+            Axios.post(url,obj)
+            .then((response)=>{
+                navigate("/Browse");
+                
+            })
+            .catch((error)=>{
+                console.log(error)
+            })
+          } catch (error) {
+            console.log(error)
+          }
+    }
 
 
     const insuranceOptions=[
@@ -68,10 +132,12 @@ export default function BookingConfirmation({form,information,pick,drop,open, ot
 
       function couponHandler(){
         
-        const url = "http:localhost:3000/booking/find-coupon";
+        const url = "http://localhost:8000/booking/find-coupon";
+        console.log( couponID);
         try {
-            Axios.post(url, {coupon:couponID})
+            Axios.post(url, {coupon:parseInt(couponID)})
             .then((response)=>{
+                
                 setCouponVal(response.data.discount);
             })
             .catch((error)=>{
@@ -256,7 +322,7 @@ export default function BookingConfirmation({form,information,pick,drop,open, ot
                         <h1 className = "text-white text-2xl">
                             ${price}
                         </h1>
-                        <button className="bg-main-blue text-white rounded-3xl w-48 h-12 hover:bg-[#5f82ff]">
+                        <button className="bg-main-blue text-white rounded-3xl w-48 h-12 hover:bg-[#5f82ff]" onClick={confirmHandler}>
                             Confrim Booking 
                         </button>
                     </div>

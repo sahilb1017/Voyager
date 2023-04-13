@@ -12,7 +12,7 @@ function Home() {
         />
         <HomeInfo />
         <Brands />
-        <Featured />
+        {/* <Featured /> */}
         <Questions />
     </div>
     

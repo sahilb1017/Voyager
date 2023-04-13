@@ -13,6 +13,7 @@ import InspectionReport from "./pages/InspectionReport";
 import Post from "./pages/Post";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import { AppWrapper } from "../context/userContext.jsx";
+import View from "./pages/View";
 
 export default function App() {
   return (
@@ -34,6 +35,7 @@ export default function App() {
             <Route path="/MyVehicles" element={<MyVehicles />} />
             <Route path="/InspectionReport"element = {<InspectionReport/>}/>
             <Route path="/Post"element = {<Post/>}/>
+            <Route path="/View"element = {<View/>}/>
           </Routes>
         </Router>
       </AppWrapper>

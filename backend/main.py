@@ -127,12 +127,13 @@ async def create_booking(booking: _schemas.BookingCreate, db: _orm.Session = _fa
 
 @app.post("/booking/find-coupon")
 async def find_coupon(coupon: _schemas.Coupon, db:  _orm.Session = _fastapi.Depends(_services.get_db)):
-    coupon = await _services.Booking.get_coupon(coupon, db)
+    print(coupon.coupon)
+    couponn = await _services.Booking.get_coupon(coupon, db)
 
-    if not coupon:
+    if not couponn:
         raise _fastapi.HTTPException(status_code=404, detail="Coupon does not exist")
     
-    return coupon
+    return couponn
 
 
 @app.post("/booking/get-booked")

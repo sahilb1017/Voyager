@@ -42,6 +42,7 @@ function MyRentals() {
             <p className="text-white text-3xl font-bold pb-8">My Rentals</p>
             <div className="mb-12">
               <CarouselDisplay 
+                card_type="MyRentals"
                 vehicle={rentals}
               />
             </div>

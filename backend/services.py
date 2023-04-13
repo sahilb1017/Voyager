@@ -234,7 +234,7 @@ class Vehicles:
                                         WHERE v.Reviewed = 1 AND v.Availability = 1
                                         '''))
         for j in jets:
-            x = _schemas.Jet(
+            x = _schemas.InspectionJet(
                 reg_num=j.REG_NUM, license=j.License, num_passengers=j.Num_Of_Passengers, mileage=j.Mileage, model=j.Model, make=j.Make, color=j.Color,
                 price=j.Price, availability=j.Availability, reviewed=j.Reviewed, mechanic_id=j.Mechanic_ID, cleaner_id=j.Cleaner_ID, owner_id=j.Owner_ID, 
                 date_posted=j.Date_Posted, tbo=j.TBO, vehicle_type="Jet", damages=j.Damages_Level, cleanliness=j.Cleanliness_Level, 
@@ -563,9 +563,8 @@ class Booking:
         return booking
     
     async def get_coupon(coupon: _schemas.Coupon, db: _orm.Session):
-        coupon = db.execute(_sql.sql.text(f'SELECT * FROM COUPON WHERE Coupon_ID = {coupon.coupon}'))
-
-        found_coupon = coupon.first()
+        couponn = db.execute(_sql.sql.text(f'SELECT * FROM COUPON WHERE Coupon_ID = {coupon.coupon}'))
+        found_coupon = couponn.first()
 
         if not found_coupon:
             return False
@@ -578,8 +577,9 @@ class Booking:
     async def get_booked_vehicles(user: _schemas.RetrieveInfo, db: _orm.Session):
         to_send = list()
 
-        cars = db.execute(_sql.sql.text(f'''SELECT * FROM ((BOOKS AS B JOIN BOOKING AS q ON b.Booking_ID = q.Booking_ID) 
-                                          JOIN VEHICLE as v on b.Vehicle_ID = v.REG_NUM) JOIN CAR AS c ON v.REG_NUM =  c.REG_NUM
+        cars = db.execute(_sql.sql.text(f'''SELECT * FROM (((BOOKS AS B JOIN BOOKING AS q ON b.Booking_ID = q.Booking_ID) 
+                                          JOIN VEHICLE as v on b.Vehicle_ID = v.REG_NUM) JOIN CAR AS c ON v.REG_NUM =  c.REG_NUM)
+                                          JOIN INSPECTION_REPORT AS i on i.Vehicle_Reg = v.REG_NUM
                                           WHERE b.Email_ID = "{user.email}"'''))
         
         for b in cars:
@@ -590,13 +590,15 @@ class Booking:
 
             x = _schemas.BookedCar(
                 num_passengers=b.Num_Of_Passengers, mileage=b.Mileage, model=b.Model, make=b.Make, color=b.Color, price=b.Price, 
-                date_posted=b.Date_Posted, start_date=b.Start_Date, end_date=b.End_Date, pickup=streets[0], dropoff=streets[1], vehicle_type="Car", type=b.Type
+                date_posted=b.Date_Posted, start_date=b.Start_Date, end_date=b.End_Date, pickup=streets[0], dropoff=streets[1], vehicle_type="Car", 
+                type=b.Type, cleanliness=b.Cleanliness_Level, damages=b.Damages_Level, overall=b.Overall_Rating
             )
             to_send.append(x)
 
 
-        trucks = db.execute(_sql.sql.text(f'''SELECT * FROM ((BOOKS AS B JOIN BOOKING AS q ON b.Booking_ID = q.Booking_ID) 
-                                          JOIN VEHICLE as v on b.Vehicle_ID = v.REG_NUM) JOIN TRUCK AS c ON v.REG_NUM =  c.REG_NUM
+        trucks = db.execute(_sql.sql.text(f'''SELECT * FROM (((BOOKS AS B JOIN BOOKING AS q ON b.Booking_ID = q.Booking_ID) 
+                                          JOIN VEHICLE as v on b.Vehicle_ID = v.REG_NUM) JOIN TRUCK AS c ON v.REG_NUM =  c.REG_NUM)
+                                          JOIN INSPECTION_REPORT AS i on i.Vehicle_Reg = v.REG_NUM
                                           WHERE b.Email_ID = "{user.email}"'''))
         
         for b in trucks:
@@ -607,13 +609,15 @@ class Booking:
 
             x = _schemas.BookedTruck(
                 num_passengers=b.Num_Of_Passengers, mileage=b.Mileage, model=b.Model, make=b.Make, color=b.Color, price=b.Price, 
-                date_posted=b.Date_Posted, start_date=b.Start_Date, end_date=b.End_Date, pickup=streets[0], dropoff=streets[1], vehicle_type="Truck", type=b.Tonnage
+                date_posted=b.Date_Posted, start_date=b.Start_Date, end_date=b.End_Date, pickup=streets[0], dropoff=streets[1], vehicle_type="Truck", 
+                tonnage=b.Tonnage, cleanliness=b.Cleanliness_Level, damages=b.Damages_Level, overall=b.Overall_Rating
             )
             to_send.append(x)
 
         
-        boats = db.execute(_sql.sql.text(f'''SELECT * FROM ((BOOKS AS B JOIN BOOKING AS q ON b.Booking_ID = q.Booking_ID) 
-                                          JOIN VEHICLE as v on b.Vehicle_ID = v.REG_NUM) JOIN BOAT AS c ON v.REG_NUM =  c.REG_NUM
+        boats = db.execute(_sql.sql.text(f'''SELECT * FROM (((BOOKS AS B JOIN BOOKING AS q ON b.Booking_ID = q.Booking_ID) 
+                                          JOIN VEHICLE as v on b.Vehicle_ID = v.REG_NUM) JOIN BOAT AS c ON v.REG_NUM =  c.REG_NUM)
+                                          JOIN INSPECTION_REPORT AS i on i.Vehicle_Reg = v.REG_NUM
                                           WHERE b.Email_ID = "{user.email}"'''))
         
         for b in boats:
@@ -624,13 +628,15 @@ class Booking:
 
             x = _schemas.BookedBoat(
                 num_passengers=b.Num_Of_Passengers, mileage=b.Mileage, model=b.Model, make=b.Make, color=b.Color, price=b.Price, 
-                date_posted=b.Date_Posted, start_date=b.Start_Date, end_date=b.End_Date, pickup=streets[0], dropoff=streets[1], vehicle_type="Boat", type=b.Knots
+                date_posted=b.Date_Posted, start_date=b.Start_Date, end_date=b.End_Date, pickup=streets[0], dropoff=streets[1], vehicle_type="Boat", 
+                knots=b.Knots, cleanliness=b.Cleanliness_Level, damages=b.Damages_Level, overall=b.Overall_Rating
             )
             to_send.append(x)
 
 
-        motorcycles = db.execute(_sql.sql.text(f'''SELECT * FROM ((BOOKS AS B JOIN BOOKING AS q ON b.Booking_ID = q.Booking_ID) 
-                                          JOIN VEHICLE as v on b.Vehicle_ID = v.REG_NUM) JOIN MOTORCYCLE AS c ON v.REG_NUM =  c.REG_NUM
+        motorcycles = db.execute(_sql.sql.text(f'''SELECT * FROM (((BOOKS AS B JOIN BOOKING AS q ON b.Booking_ID = q.Booking_ID) 
+                                          JOIN VEHICLE as v on b.Vehicle_ID = v.REG_NUM) JOIN MOTORCYCLE AS c ON v.REG_NUM =  c.REG_NUM)
+                                          JOIN INSPECTION_REPORT AS i on i.Vehicle_Reg = v.REG_NUM
                                           WHERE b.Email_ID = "{user.email}"'''))
         
         for b in motorcycles:
@@ -641,13 +647,15 @@ class Booking:
 
             x = _schemas.BookedMotorcycle(
                 num_passengers=b.Num_Of_Passengers, mileage=b.Mileage, model=b.Model, make=b.Make, color=b.Color, price=b.Price, 
-                date_posted=b.Date_Posted, start_date=b.Start_Date, end_date=b.End_Date, pickup=streets[0], dropoff=streets[1], vehicle_type="Motorcycle", type=b.CC
+                date_posted=b.Date_Posted, start_date=b.Start_Date, end_date=b.End_Date, pickup=streets[0], dropoff=streets[1], vehicle_type="Motorcycle", 
+                cc=b.CC, cleanliness=b.Cleanliness_Level, damages=b.Damages_Level, overall=b.Overall_Rating
             )
             to_send.append(x)
         
 
-        jets = db.execute(_sql.sql.text(f'''SELECT * FROM ((BOOKS AS B JOIN BOOKING AS q ON b.Booking_ID = q.Booking_ID) 
-                                          JOIN VEHICLE as v on b.Vehicle_ID = v.REG_NUM) JOIN JET AS c ON v.REG_NUM =  c.REG_NUM
+        jets = db.execute(_sql.sql.text(f'''SELECT * FROM (((BOOKS AS B JOIN BOOKING AS q ON b.Booking_ID = q.Booking_ID) 
+                                          JOIN VEHICLE as v on b.Vehicle_ID = v.REG_NUM) JOIN JET AS c ON v.REG_NUM =  c.REG_NUM)
+                                          JOIN INSPECTION_REPORT AS i on i.Vehicle_Reg = v.REG_NUM
                                           WHERE b.Email_ID = "{user.email}"'''))
         
         for b in jets:
@@ -658,7 +666,8 @@ class Booking:
 
             x = _schemas.BookedJet(
                 num_passengers=b.Num_Of_Passengers, mileage=b.Mileage, model=b.Model, make=b.Make, color=b.Color, price=b.Price, 
-                date_posted=b.Date_Posted, start_date=b.Start_Date, end_date=b.End_Date, pickup=streets[0], dropoff=streets[1], vehicle_type="Jet", type=b.TBO
+                date_posted=b.Date_Posted, start_date=b.Start_Date, end_date=b.End_Date, pickup=streets[0], dropoff=streets[1], vehicle_type="Jet", 
+                tbo=b.TBO, cleanliness=b.Cleanliness_Level, damages=b.Damages_Level, overall=b.Overall_Rating
             )
             to_send.append(x)
 
